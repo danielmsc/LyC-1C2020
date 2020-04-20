@@ -16,7 +16,7 @@ SIMBOLO			( "@" | "%" | {BLANCO} | ":" )
 CONS_REAL		{"-"}?( {DIGITO}+"."{DIGITO}+ | {DIGITO}*"."{DIGITO}+ | {DIGITO}+"."{DIGITO}* )
 CONS_ENTERO		{"-"}?{DIGITO}+
 CONS_STRING		"""( {LETRA}|{SIMBOLO}|{DIGITO} )+"""
-ID				{LETRA}({LETRA}|{NUMERO})*
+ID				{LETRA}({LETRA}|{DIGITO})*
 COMEN			{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})*{"/***"}
 COMEN_ANI		{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})* {COMEN}? ({DIGITO}|{SIMBOLO}|{LETRA})* {"/***"}
 
