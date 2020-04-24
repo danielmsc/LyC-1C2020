@@ -24,7 +24,7 @@ COMEN_ANI		{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})* {COMEN}? ({DIGITO}|{SIMBOLO}|{L
 
 %%
 "DEFVAR"		{return DEFVAR;}
-"ENDVAR"		{return ENDVAR;}
+"ENDDEF"		{return ENDDEF;}
 {CONS_REAL}		{return CONS_REAL;}
 {CONS_ENTERO}	{return CONS_ENTERO;}
 {CONS_STRING}	{return CONS_STRING;}
@@ -35,7 +35,9 @@ COMEN_ANI		{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})* {COMEN}? ({DIGITO}|{SIMBOLO}|{L
 "DISPLAY"		{return DISPLAY;}
 "GET"			{return GET;}
 "WHILE"			{return WHILE;}
+"ENDWHILE"		{return ENDWHILE;}
 "IF"			{return IF;}
+"ENDIF"			{return ENDIF;}
 "AND"			{return AND;}
 "OR"			{return OR;}
 "NOT"			{return NOT;}
