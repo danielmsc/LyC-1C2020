@@ -12,10 +12,11 @@ FILE *yyin;
 DIGITO 			[0-9]
 LETRA 			[a-zA-Z]
 BLANCO			{" "}
-SIMBOLO			( "@" | "%" | {BLANCO} | ":" )
-CONS_REAL		{"-"}?( {DIGITO}+"."{DIGITO}+ | {DIGITO}*"."{DIGITO}+ | {DIGITO}+"."{DIGITO}* )
-CONS_ENTERO		{"-"}?{DIGITO}+
-CONS_STRING		"""( {LETRA}|{SIMBOLO}|{DIGITO} )+"""
+COMILLAS		{"""}
+SIMBOLO			( "@" | "%" | {BLANCO} | ":" | {COMILLAS} )
+CONS_REAL		( {DIGITO}+"."{DIGITO}+ | {DIGITO}*"."{DIGITO}+ | {DIGITO}+"."{DIGITO}* )
+CONS_ENTERO		{DIGITO}+
+CONS_STRING		{COMILLAS}( {LETRA}|{SIMBOLO}|{DIGITO}|{BLANCO} )*{COMILLAS}
 ID				{LETRA}({LETRA}|{DIGITO})*
 COMEN			{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})*{"/***"}
 COMEN_ANI		{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})* {COMEN}? ({DIGITO}|{SIMBOLO}|{LETRA})* {"/***"}
@@ -24,6 +25,13 @@ COMEN_ANI		{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})* {COMEN}? ({DIGITO}|{SIMBOLO}|{L
 %%
 "DEFVAR"		{return DEFVAR;}
 "ENDVAR"		{return ENDVAR;}
+{CONS_REAL}		{return CONS_REAL;}
+{CONS_ENTERO}	{return CONS_ENTERO;}
+{CONS_STRING}	{return CONS_STRING;}
+{ID}			{return	ID;}
+"FLOAT"			{return FLOAT;}
+"INT"			{return INT;}
+"STRING"		{return STRING;}
 "DISPLAY"		{return DISPLAY;}
 "GET"			{return GET;}
 "WHILE"			{return WHILE;}
@@ -55,6 +63,5 @@ BLANCO			{ }
 "\t"			{ }
 "\n"			{ }
 
-"="				{return OP_;}
 
 
