@@ -72,6 +72,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include "y.tab.h"
 
 FILE *yyin;
@@ -81,7 +83,7 @@ int crearTS();
 
 
 /* Line 189 of yacc.c  */
-#line 85 "y.tab.c"
+#line 87 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -199,7 +201,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 203 "y.tab.c"
+#line 205 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -505,12 +507,12 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    24,    24,    26,    27,    29,    30,    32,    33,    34,
-      36,    37,    39,    40,    42,    43,    44,    45,    46,    47,
-      49,    50,    52,    53,    54,    56,    57,    58,    60,    61,
-      62,    63,    64,    65,    67,    69,    71,    73,    75,    76,
-      77,    78,    80,    82,    83,    84,    85,    86,    87,    89,
-      91,    92,    94
+       0,    26,    26,    28,    29,    31,    32,    34,    35,    36,
+      38,    39,    41,    42,    44,    45,    46,    47,    48,    49,
+      51,    52,    54,    55,    56,    58,    59,    60,    62,    63,
+      64,    65,    66,    67,    69,    71,    73,    75,    77,    78,
+      79,    80,    82,    84,    85,    86,    87,    88,    89,    91,
+      93,    94,    96
 };
 #endif
 
@@ -1485,7 +1487,7 @@ yyreduce:
       
 
 /* Line 1455 of yacc.c  */
-#line 1489 "y.tab.c"
+#line 1491 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1697,7 +1699,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 95 "sintactico.y"
+#line 97 "sintactico.y"
 
 
 int main(int argc,char *argv[])
@@ -1705,7 +1707,6 @@ int main(int argc,char *argv[])
 	if ((yyin = fopen(argv[1], "rt")) == NULL)
 	{
 		printf("No se puede abrir el archivo: %s", argv[1]);
-		return 1; 
 	}
 	else
 	{
@@ -1713,13 +1714,16 @@ int main(int argc,char *argv[])
 		{
 			yyparse();
 		}
-		else 
-		{
-			return 2;
-		}
 	}
 	fclose(yyin);
 	return 0;
+}
+
+int yyerror(void)
+{
+    printf("Syntax Error\n");
+    system ("Pause");
+    exit (1);
 }
 
 int crearTS()

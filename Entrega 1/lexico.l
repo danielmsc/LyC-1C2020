@@ -15,6 +15,7 @@ typedef struct filaTS {
 
 filaTS regTS;
 
+int yylex();
 void insertarEnTS(char *yytext, int isString);
 void insertarVarEnTS();
 int validarString(char *palabra);
@@ -86,7 +87,6 @@ void insertarEnTS(char *yytext, int isString)
 	if ((ts = fopen("ts.txt", "a")) == NULL)
 	{
 		printf("No se puede abrir el archivo ts.txt");
-		return;
 	}
 	else 
 	{
@@ -106,7 +106,6 @@ void insertarVarEnTS() {
 	if ((ts = fopen("ts.txt", "a")) == NULL)
 	{
 		printf("No se puede abrir el archivo: ts.txt");
-		return;
 	}
 	else 
 	{

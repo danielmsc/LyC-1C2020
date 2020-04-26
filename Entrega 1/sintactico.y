@@ -1,12 +1,15 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include "y.tab.h"
 
 FILE *yyin;
 FILE *ts;
 
 int crearTS();
+
 %}
 
 %token DEFVAR ENDDEF
@@ -114,6 +117,13 @@ int main(int argc,char *argv[])
 	}
 	fclose(yyin);
 	return 0;
+}
+
+int yyerror(void)
+{
+    printf("Syntax Error\n");
+    system ("Pause");
+    exit (1);
 }
 
 int crearTS()
