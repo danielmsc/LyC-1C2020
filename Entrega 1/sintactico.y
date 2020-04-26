@@ -27,7 +27,7 @@ bloquedef: DEFVAR bloquevar ENDDEF
 bloquevar: declaracion
 			| bloquevar declaracion;
 
-declaracion:	INTEGER OP_DEF listadef
+declaracion:	INT OP_DEF listadef
 				| STRING OP_DEF listadef
 				| FLOAT OP_DEF listadef;
 				
