@@ -5,6 +5,7 @@
 #include <math.h>
 #include "y.tab.h"
 
+int linea = 1;
 FILE *yyin;
 FILE *ts;
 
@@ -72,15 +73,15 @@ COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
 "<="			{return OP_LE;}
 ">="			{return OP_GE;}
 "!="			{return OP_NE;}
-{CONS_FLO}		{if (validarReal(atof(yytext))) { insertarEnTS(yytext, 0); return CONS_FLO; } else { printf("La constante esta fuera de rango %s\n", yytext); }}
-{CONS_ENTERO}	{if (validarInteger(atoi(yytext))) { insertarEnTS(yytext, 0); return CONS_ENTERO; } else { printf("La constante esta fuera de rango %s\n", yytext); }}
-{CONS_CAD}		{if (validarString(yytext)) {insertarEnTS(yytext, 1); return CONS_CAD;} else {printf("La constante excede los caracteres permitidos %d\n", strlen(yytext));}}
-{ID}			{strcpy(regTS.nombre, yytext); insertarVarEnTS(); return ID;}
+{CONS_FLO}		{if (validarReal(atof(yytext))) { insertarEnTS(yytext, 0); yylval.overflow = 0; } else { printf("La constante esta fuera de rango %s\n", yytext); yylval.overflow = 1; } return CONS_FLO; }
+{CONS_ENTERO}	{if (validarInteger(atoi(yytext))) { insertarEnTS(yytext, 0); yylval.overflow = 0; } else { printf("La constante esta fuera de rango %s\n", yytext); yylval.overflow = 1;} return CONS_ENTERO; }
+{CONS_CAD}		{if (validarString(yytext)) { insertarEnTS(yytext, 1); yylval.overflow = 0; } else {printf("La constante excede los caracteres permitidos %d\n", strlen(yytext) - 2); yylval.overflow = 1;} return CONS_CAD;}
+{ID}			{strcpy(regTS.nombre, yytext); insertarVarEnTS(); yylval.id = strdup(yytext); return ID;}
 {COMEN}			{ }
 {COMEN_ANI}		{ }
 " "				{ }
 "\t"			{ }
-"\n"			{ }
+\n				{ ++linea; }
 %%
 
 void insertarEnTS(char *yytext, int isString)
@@ -142,27 +143,31 @@ int guardadoEnTabla(char *nombre, int var)
     char str[200];
 	char nom[50];
 	char nompar[50];
-	if(!var){
+	if (!var)
+	{
 		char par[50];
 		strcpy(nompar,"");
 		strcpy(par,"");
 		strcpy(par,"_");
 		strcat(nompar, par);
 		strcat(nompar, nombre);
-	}else{
+	}
+	else
+	{
 		strcpy(nompar,nombre);
 	}
 	
     if ((ts = fopen("ts.txt", "r")) == NULL)
     {
-        printf("No se puede abrir el archivo ts.txt");
+        printf("No se puede abrir el archivo ts.txt\n");
     }
     else
     {
         while(fgets(str,200,ts)!=NULL)
 		{
 			sscanf( str, "%s", nom );
-			if(strcmp(nompar, nom)==0){
+			if(strcmp(nompar, nom)==0)
+			{
 			    fclose(ts);
 				return 1;
 			}
