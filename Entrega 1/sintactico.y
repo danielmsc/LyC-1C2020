@@ -8,8 +8,9 @@
 FILE *yyin;
 FILE *ts;
 
+int yylex();
+int yyerror();
 int crearTS();
-
 %}
 
 %token DEFVAR ENDDEF
@@ -121,7 +122,7 @@ int main(int argc,char *argv[])
 	return 0;
 }
 
-int yyerror(void)
+int yyerror()
 {
     printf("Syntax Error\n");
     system ("Pause");
