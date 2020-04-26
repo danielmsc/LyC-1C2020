@@ -18,6 +18,7 @@ filaTS regTS;
 int yylex();
 void insertarEnTS(char *yytext, int isString);
 void insertarVarEnTS();
+void removerComillas(char *str, char *aux);
 int validarString(char *palabra);
 int validarInteger(int num);
 int validarReal(double num);
@@ -94,7 +95,14 @@ void insertarEnTS(char *yytext, int isString)
 		{
 			if (isString)
 			{
-				fprintf(ts, "_%-30s | %-30s | %-30s | %-30d\n", yytext,"", yytext, strlen(yytext));
+				char *str = yytext + 1;
+				char *aux = malloc(sizeof(char)*40);
+
+				removerComillas(str, aux);
+				
+				fprintf(ts, "_%-30s | %-30s | %-30s | %-30d\n", aux,"", aux, strlen(aux));
+				
+				free(aux);
 			}
 			else 
 			{
@@ -104,6 +112,13 @@ void insertarEnTS(char *yytext, int isString)
 		}
 		fclose(ts);
 	}
+}
+
+void removerComillas(char *str, char *aux)
+{
+    int longStr = strlen(str);
+    strncpy(aux, str, longStr);
+    *(aux + longStr - 1) = '\0';
 }
 
 void insertarVarEnTS() 
