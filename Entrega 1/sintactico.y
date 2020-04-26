@@ -5,6 +5,8 @@
 
 FILE *yyin;
 FILE *ts;
+
+int crearTS();
 %}
 
 %token DEFVAR ENDDEF
@@ -90,6 +92,41 @@ display: DISPLAY ID
 		 | DISPLAY CONS_STRING;
 
 get: GET ID;
-
-
 %%
+
+int main(int argc,char *argv[])
+{
+	if ((yyin = fopen(argv[1], "rt")) == NULL)
+	{
+		printf("No se puede abrir el archivo: %s", argv[1]);
+		return 1; 
+	}
+	else
+	{
+		if (crearTS()) 
+		{
+			yyparse();
+		}
+		else 
+		{
+			return 2;
+		}
+	}
+	fclose(yyin);
+	return 0;
+}
+
+int crearTS()
+{
+	if ((ts = fopen("ts.txt", "w")) == NULL)
+	{
+		printf("No se puede abrir el archivo ts.txt");
+		return 0;
+	}
+	else 
+	{
+		fprintf(ts, "%s\t%s\t%s\t%s", "NOMBRE", "TIPODATO", "VALOR", "LONGITUD");
+	}
+	fclose(ts);
+	return 1;
+}

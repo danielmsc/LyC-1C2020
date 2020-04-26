@@ -8,12 +8,18 @@
 FILE *yyin;
 FILE *ts;
 
-struct filaTS {
+typedef struct filaTS {
 	char *nombre;
 	char *tipo;
-};
+} filaTS;
 
-struct filaTS regTS;
+filaTS regTS;
+
+void insertarEnTS(char *yytext, int isString);
+void insertarVarEnTS();
+int validarString(char *palabra);
+int validarInteger(int num);
+int validarReal(double num);
 %}
 
 %option noyywrap  
@@ -74,43 +80,6 @@ COMEN_ANI		{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})* {COMEN}? ({DIGITO}|{SIMBOLO}|{L
 \t				{ }
 \n				{ }
 %%
-
-int main(int argc,char *argv[])
-{
-	if ((yyin = fopen(argv[1], "rt")) == NULL)
-	{
-		printf("No se puede abrir el archivo: %s", argv[1]);
-		return 1; 
-	}
-	else
-	{
-		if (crearTS()) 
-		{
-			yylex();
-		}
-		else 
-		{
-			return 2;
-		}
-	}
-	fclose(yyin);
-	return 0;
-}
-
-int crearTS()
-{
-	if ((ts = fopen("ts.txt", "w")) == NULL)
-	{
-		printf("No se puede abrir el archivo ts.txt");
-		return 0;
-	}
-	else 
-	{
-		fprintf(ts, "%s\t%s\t%s\t%s", "NOMBRE", "TIPODATO", "VALOR", "LONGITUD");
-	}
-	fclose(ts);
-	return 1;
-}
 
 void insertarEnTS(char *yytext, int isString)
 {
