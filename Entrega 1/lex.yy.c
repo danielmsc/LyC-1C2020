@@ -472,8 +472,8 @@ FILE *yyin;
 FILE *ts;
 
 typedef struct filaTS {
-	char *nombre;
-	char *tipo;
+	char nombre[50];
+	char tipo[50];
 } filaTS;
 
 filaTS regTS;
