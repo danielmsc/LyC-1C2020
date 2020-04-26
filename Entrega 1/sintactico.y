@@ -24,77 +24,77 @@ int crearTS();
 %token OP_LT OP_GT OP_EQ OP_LE OP_GE OP_NE
 
 %%
-programa: bloquedef bloquemain;
+programa: bloquedef bloquemain {printf("Regla 1: <programa> ::= <bloquedef> <bloquemain>\nCompilacion realizada con exito.\n");};
 
-bloquedef: DEFVAR bloquevar ENDDEF
-			| DEFVAR ENDDEF;
+bloquedef: DEFVAR bloquevar ENDDEF {printf("Regla 2: <bloquedef> ::= DEFVAR <bloquevar> ENDDEF\n");}
+			| DEFVAR ENDDEF {printf("Regla 3: <bloquedef> ::= DEFVAR ENDDEF\n");};
 			
-bloquevar: declaracion
-			| bloquevar declaracion;
+bloquevar: declaracion {printf("Regla 4: <bloquevar> ::= <declaracion>\n");}
+			| bloquevar declaracion {printf("Regla 5: <bloquevar> ::= <bloquevar> <declaracion>\n");};
 
-declaracion:	INT OP_DEF listadef
-				| STRING OP_DEF listadef
-				| FLOAT OP_DEF listadef;
+declaracion:	INT OP_DEF listadef {printf("Regla 6: <declaracion> ::= INT OP_DEF <listadef>\n");}
+				| STRING OP_DEF listadef {printf("Regla 7: <declaracion> ::= STRING OP_DEF <listadef>\n");}
+				| FLOAT OP_DEF listadef {printf("Regla 8: <declaracion> ::= FLOAT OP_DEF listadef\n");};
 				
-listadef:  ID
-			| listadef PYC ID;
+listadef:  ID {printf("Regla 9: <listadef> ::= ID\n");}
+			| listadef PYC ID {printf("Regla 10: <listadef> ::= <listadef> PYC ID\n");};
 
-bloquemain: sentencia
-			| bloquemain sentencia;
+bloquemain: sentencia {printf("Regla 11: <bloquemain> ::= <sentencia>\n");}
+			| bloquemain sentencia {printf("Regla 12: <bloquemain> ::= <bloquemain> <sentencia>\n");};
 			
-sentencia: asignacion
-			| ciclo
-			| seleccion
-			| unario
-			| display
-			| get;
+sentencia: asignacion {printf("Regla 13: <sentencia> ::= <asignacion>\n");}
+			| ciclo {printf("Regla 14: <sentencia> ::= <ciclo>\n");}
+			| seleccion {printf("Regla 15: <sentencia> ::= <seleccion>\n");}
+			| unario {printf("Regla 16: <sentencia> ::= <unario>\n");}
+			| display {printf("Regla 17: <sentencia> ::= <display>\n");}
+			| get {printf("Regla 18: <sentencia> ::= <get>\n");};
 
-asignacion: ID OP_ASIG expresion
-			| ID OP_ASIG CONS_STRING;
+asignacion: ID OP_ASIG expresion {printf("Regla 19: <asignacion> ::= ID OP_ASIG <expresion>\n");}
+			| ID OP_ASIG CONS_STRING {printf("Regla 20: <asignacion> ::= ID OP_ASIG CONS_STRING\n");};
 
-expresion: expresion OP_SUM termino
-			| expresion OP_RES termino
-			| termino;
+expresion: expresion OP_SUM termino {printf("Regla 21: <expresion> ::= <expresion> OP_SUM <termino>\n");}
+			| expresion OP_RES termino {printf("Regla 22: <expresion> ::= <expresion> OP_RES <termino>\n");}
+			| termino {printf("Regla 23: <expresion> ::= <termino>\n");};
 			
-termino: termino OP_MUL factor
-		 | termino OP_DIV factor
-		 | factor;
+termino: termino OP_MUL factor {printf("Regla 24: <termino> ::= <termino> OP_MUL <factor>\n");}
+		 | termino OP_DIV factor {printf("Regla 25: <termino> ::= <termino> OP_DIV <factor>\n");}
+		 | factor {printf("Regla 26: <termino> ::= <factor>\n");};
 		 
-factor: ID
-		| CONS_ENTERO
-		| CONS_REAL
-		| PAR_A expresion PAR_C
-		| factorial
-		| combinatoria;
+factor: ID {printf("Regla 27: <factor> ::= ID\n");}
+		| CONS_ENTERO {printf("Regla 28: <factor> ::= CONS_ENTERO\n");}
+		| CONS_REAL {printf("Regla 29: <factor> ::= CONS_REAL\n");}
+		| PAR_A expresion PAR_C {printf("Regla 30: <factor> ::= PAR_A <expresion> PAR_C\n");}
+		| factorial {printf("Regla 31: <factor> ::= <factorial>\n");}
+		| combinatoria {printf("Regla 32: <factor> ::= <combinatoria>\n");};
 		
-combinatoria: COMB PAR_A expresion COMA expresion PAR_C;
+combinatoria: COMB PAR_A expresion COMA expresion PAR_C {printf("Regla 33: <combinatoria> ::= COMB PAR_A <expresion> COMA <expresion> PAR_C\n");};
 
-factorial: FACT PAR_A expresion PAR_C;
+factorial: FACT PAR_A expresion PAR_C {printf("Regla 34: <factorial> ::= FACT PAR_A <expresion> PAR_C\n");};
 
-ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE;
+ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE {printf("Regla 35: <ciclo> ::= WHILE PAR_A <condicion> PAR_C <bloquemain> ENDWHILE\n");};
 
-seleccion: IF PAR_A condicion PAR_C bloquemain ENDIF;
+seleccion: IF PAR_A condicion PAR_C bloquemain ENDIF {printf("Regla 36: <seleccion> ::= IF PAR_A <condicion> PAR_C <bloquemain> ENDIF\n");};
 
-condicion: argumento
-			| NOT argumento
-			| argumento AND argumento
-			| argumento OR  argumento;
+condicion: argumento {printf("Regla 37: <condicion> ::= <argumento>\n");}
+			| NOT argumento {printf("Regla 38: <condicion> ::= NOT argumento\n");}
+			| argumento AND argumento {printf("Regla 39: <condicion> ::= <argumento> AND <argumento>\n");}
+			| argumento OR  argumento {printf("Regla 40: <condicion> ::= <argumento> OR  <argumento>\n");};
 
-argumento: expresion operador expresion;
+argumento: expresion operador expresion {printf("Regla 41: <argumento> ::= <expresion> <operador> <expresion>\n");};
 			
-operador: OP_LT
-			| OP_GT
-			| OP_EQ
-			| OP_LE
-			| OP_GE
-			| OP_NE;
+operador: OP_LT {printf("Regla 42: <operador> ::= OP_LT\n");}
+			| OP_GT {printf("Regla 43: <operador> ::= OP_GT\n");}
+			| OP_EQ {printf("Regla 44: <operador> ::= OP_EQ\n");}
+			| OP_LE {printf("Regla 45: <operador> ::= OP_LE\n");}
+			| OP_GE {printf("Regla 46: <operador> ::= OP_GE\n");}
+			| OP_NE {printf("Regla 47: <operador> ::= OP_NE\n");};
 		
-unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C;
+unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C {printf("Regla 48: <unario> ::= ID OP_ASIG IF PAR_A <condicion> COMA <expresion> COMA <expresion> PAR_C\n");};
 
-display: DISPLAY ID	
-		 | DISPLAY CONS_STRING;
+display: DISPLAY ID {printf("Regla 49: <display> ::= DISPLAY ID\n");}	
+		 | DISPLAY CONS_STRING {printf("Regla 50: <display> ::= DISPLAY CONS_STRING\n");};
 
-get: GET ID;
+get: GET ID {printf("Regla 51: <get> ::= GET ID\n");};
 %%
 
 int main(int argc,char *argv[])
