@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "y.tab.h"
-FILE  *yyin;
+
+FILE *yyin;
+FILE *ts;
 %}
 
 %token DEFVAR ENDDEF
@@ -91,24 +93,3 @@ get: GET ID;
 
 
 %%
-int main(int argc,char *argv[])
-{
-  if ((yyin = fopen(argv[1], "rt")) == NULL)
-  {
-	printf("\nNo se puede abrir el archivo: %s\n", argv[1]);
-  }
-  else
-  {
-	yyparse();
-  }
-  fclose(yyin);
-  return 0;
-}
-
-int yyerror(void)
-{
-    printf("Syntax Error\n");
-	system ("Pause");
-	exit (1);
-}
-
