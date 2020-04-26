@@ -21,6 +21,7 @@ void insertarVarEnTS();
 int validarString(char *palabra);
 int validarInteger(int num);
 int validarReal(double num);
+int guardadoEnTabla(char *nombre, int var);
 %}
 
 %option noyywrap  
@@ -83,58 +84,73 @@ COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
 
 void insertarEnTS(char *yytext, int isString)
 {
-	if ((ts = fopen("ts.txt", "a")) == NULL)
+	if(!guardadoEnTabla(yytext,0))
 	{
-		printf("No se puede abrir el archivo ts.txt\n");
-	}
-	else 
-	{
-		if(!guardadoEnTabla(yytext))
+		if ((ts = fopen("ts.txt", "a")) == NULL)
+		{
+			printf("No se puede abrir el archivo ts.txt\n");
+		}
+		else 
 		{
 			if (isString)
 			{
-				fprintf(ts, "_%s\t\t\t%s\t%d\n", yytext, yytext, strlen(yytext));
+				fprintf(ts, "_%-30s | %-30s | %-30s | %-30d\n", yytext,"", yytext, strlen(yytext));
 			}
 			else 
 			{
-				fprintf(ts, "_%s\t\t\t%s\t\n", yytext, yytext);
+				fprintf(ts, "_%-30s | %-30s | %-30s |\n", yytext,"", yytext);
 			}
+			
 		}
+		fclose(ts);
 	}
-	fclose(ts);
 }
 
 void insertarVarEnTS() 
 {
-	if ((ts = fopen("ts.txt", "a")) == NULL)
+	if(!guardadoEnTabla(yytext,1))
 	{
-		printf("No se puede abrir el archivo: ts.txt\n");
-	}
-	else 
-	{
-		if(!guardadoEnTabla(regTS.nombre))
+		if ((ts = fopen("ts.txt", "a")) == NULL)
 		{
-			fprintf(ts, "%s\t\t\t\t\t%s\t-\t\n", regTS.nombre, regTS.tipo);
+			printf("No se puede abrir el archivo: ts.txt\n");
 		}
+		else 
+		{
+				fprintf(ts, "%-31s | %-30s | %-30s | \n", regTS.nombre, regTS.tipo, "-");
+		}
+		fclose(ts);
 	}
-	fclose(ts);
 }
 
-void guardadoEnTabla(char *yytext)
+int guardadoEnTabla(char *nombre, int var)
 {
-    char str[100];
+    char str[200];
+	char nom[50];
+	char nompar[50];
+	if(!var){
+		char par[50];
+		strcpy(nompar,"");
+		strcpy(par,"");
+		strcpy(par,"_");
+		strcat(nompar, par);
+		strcat(nompar, nombre);
+	}else{
+		strcpy(nompar,nombre);
+	}
+	
     if ((ts = fopen("ts.txt", "r")) == NULL)
     {
         printf("No se puede abrir el archivo ts.txt");
     }
     else
     {
-        while(fgets(str,100,fp)!=NULL))
+        while(fgets(str,200,ts)!=NULL)
 		{
-            if(strstr(str, yytext) != NULL)
-			{
-                return 1;
-            }
+			sscanf( str, "%s", nom );
+			if(strcmp(nompar, nom)==0){
+			    fclose(ts);
+				return 1;
+			}
         }
     }
     fclose(ts);

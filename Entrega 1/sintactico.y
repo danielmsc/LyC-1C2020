@@ -137,7 +137,8 @@ int crearTS()
 	}
 	else 
 	{
-		fprintf(ts, "%s\t%s\t%s\t%s\n", "NOMBRE", "TIPODATO", "VALOR", "LONGITUD");
+		fprintf(ts, "%s\n", "NOMBRE                          |TIPODATO                        |VALOR                           |LONGITUD");
+		fprintf(ts, "%s\n", "-----------------------------------------------------------------------------------------------------------");
 	}
 	fclose(ts);
 	return 1;
