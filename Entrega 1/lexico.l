@@ -22,7 +22,7 @@ struct filaTS regTS;
 DIGITO 			[0-9]
 LETRA 			[a-zA-Z]
 BLANCO			{" "}
-COMILLAS		{"""}
+COMILLAS		{"\""}
 SIMBOLO			( "@" | "%" | {BLANCO} | ":" | {COMILLAS} )
 CONS_REAL		( {DIGITO}+"."{DIGITO}+ | {DIGITO}*"."{DIGITO}+ | {DIGITO}+"."{DIGITO}* )
 CONS_ENTERO		{DIGITO}+
@@ -64,13 +64,13 @@ COMEN_ANI		{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})* {COMEN}? ({DIGITO}|{SIMBOLO}|{L
 "<="			{return OP_LE;}
 ">="			{return OP_GE;}
 "!="			{return OP_NE;}
-{CONS_REAL}		{if (validarReal(atof(yytext))) { insertarEnTS(yytext, 0); return CONS_REAL; } else { printf(\"La constante esta fuera de rango %s\", yytext); }}
-{CONS_ENTERO}	{if (validarInteger(atoi(yytext))) { insertarEnTS(yytext, 0); return CONS_ENTERO; } else { printf(\"La constante esta fuera de rango %s\", yytext); }}
-{CONS_STRING}	{if (validarString(yytext)) { insertarEnTS(yytext, 1); return CONS_STRING; } else { printf(\"La constante excede los caracteres permitidos %d\", strlen(yytext)); }}
-{ID}			{strcpy(regTS.nombre, yytext); return ID;}
-{COMEN}			{ }
-{COMEN_ANI}		{ }
-{BLANCO}		{ }
+"{CONS_REAL}"	{if (validarReal(atof(yytext))) { insertarEnTS(yytext, 0); return CONS_REAL; } else { printf("La constante esta fuera de rango %s", yytext); }}
+"{CONS_ENTERO}"	{if (validarInteger(atoi(yytext))) { insertarEnTS(yytext, 0); return CONS_ENTERO; } else { printf("La constante esta fuera de rango %s", yytext); }}
+"{CONS_STRING}"	{if (validarString(yytext)) { insertarEnTS(yytext, 1); return CONS_STRING; } else { printf("La constante excede los caracteres permitidos %d", strlen(yytext)); }}
+"{ID}"			{strcpy(regTS.nombre, yytext); return ID;}
+"{COMEN}"		{ }
+"{COMEN_ANI}"	{ }
+"{BLANCO}"		{ }
 \t				{ }
 \n				{ }
 %%
