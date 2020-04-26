@@ -1,5 +1,0 @@
-1)Hacer las preguntas.
-LEXICO:
-	1) Validaciones de Longitud.
-SINTACTICO:
-	1) TODO!

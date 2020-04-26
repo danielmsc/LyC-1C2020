@@ -26,53 +26,55 @@ Gramática
    16          | unario
    17          | display
    18          | get
+   19          | factorial
+   20          | combinatoria
 
-   19 asignacion: ID OP_ASIG expresion
-   20           | ID OP_ASIG CONS_STRING
+   21 asignacion: ID OP_ASIG expresion
+   22           | ID OP_ASIG CONS_CAD
 
-   21 expresion: expresion OP_SUM termino
-   22          | expresion OP_RES termino
-   23          | termino
+   23 expresion: expresion OP_SUM termino
+   24          | expresion OP_RES termino
+   25          | termino
 
-   24 termino: termino OP_MUL factor
-   25        | termino OP_DIV factor
-   26        | factor
+   26 termino: termino OP_MUL factor
+   27        | termino OP_DIV factor
+   28        | factor
 
-   27 factor: ID
-   28       | CONS_ENTERO
-   29       | CONS_REAL
-   30       | PAR_A expresion PAR_C
-   31       | factorial
-   32       | combinatoria
+   29 factor: ID
+   30       | CONS_ENTERO
+   31       | CONS_FLO
+   32       | PAR_A expresion PAR_C
+   33       | factorial
+   34       | combinatoria
 
-   33 combinatoria: COMB PAR_A expresion COMA expresion PAR_C
+   35 combinatoria: COMB PAR_A expresion COMA expresion PAR_C
 
-   34 factorial: FACT PAR_A expresion PAR_C
+   36 factorial: FACT PAR_A expresion PAR_C
 
-   35 ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE
+   37 ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE
 
-   36 seleccion: IF PAR_A condicion PAR_C bloquemain ENDIF
+   38 seleccion: IF PAR_A condicion PAR_C bloquemain ENDIF
 
-   37 condicion: argumento
-   38          | NOT argumento
-   39          | argumento AND argumento
-   40          | argumento OR argumento
+   39 condicion: argumento
+   40          | NOT argumento
+   41          | argumento AND argumento
+   42          | argumento OR argumento
 
-   41 argumento: expresion operador expresion
+   43 argumento: expresion operador expresion
 
-   42 operador: OP_LT
-   43         | OP_GT
-   44         | OP_EQ
-   45         | OP_LE
-   46         | OP_GE
-   47         | OP_NE
+   44 operador: OP_LT
+   45         | OP_GT
+   46         | OP_EQ
+   47         | OP_LE
+   48         | OP_GE
+   49         | OP_NE
 
-   48 unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C
+   50 unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C
 
-   49 display: DISPLAY ID
-   50        | DISPLAY CONS_STRING
+   51 display: DISPLAY ID
+   52        | DISPLAY CONS_CAD
 
-   51 get: GET ID
+   53 get: GET ID
 
 
 Terminales con las reglas donde aparecen
@@ -81,40 +83,40 @@ $end (0) 0
 error (256)
 DEFVAR (258) 2 3
 ENDDEF (259) 2 3
-CONS_REAL (260) 29
-CONS_ENTERO (261) 28
-CONS_STRING (262) 20 50
-ID (263) 9 10 19 20 27 48 49 51
+CONS_FLO (260) 31
+CONS_ENTERO (261) 30
+CONS_CAD (262) 22 52
+ID (263) 9 10 21 22 29 50 51 53
 FLOAT (264) 8
 INT (265) 6
 STRING (266) 7
-DISPLAY (267) 49 50
-GET (268) 51
-WHILE (269) 35
-ENDWHILE (270) 35
-IF (271) 36 48
-ENDIF (272) 36
-AND (273) 39
-OR (274) 40
-NOT (275) 38
-FACT (276) 34
-COMB (277) 33
+DISPLAY (267) 51 52
+GET (268) 53
+WHILE (269) 37
+ENDWHILE (270) 37
+IF (271) 38 50
+ENDIF (272) 38
+AND (273) 41
+OR (274) 42
+NOT (275) 40
+FACT (276) 36
+COMB (277) 35
 PYC (278) 10
-PAR_A (279) 30 33 34 35 36 48
-PAR_C (280) 30 33 34 35 36 48
-COMA (281) 33 48
+PAR_A (279) 32 35 36 37 38 50
+PAR_C (280) 32 35 36 37 38 50
+COMA (281) 35 50
 OP_DEF (282) 6 7 8
-OP_ASIG (283) 19 20 48
-OP_SUM (284) 21
-OP_RES (285) 22
-OP_DIV (286) 25
-OP_MUL (287) 24
-OP_LT (288) 42
-OP_GT (289) 43
-OP_EQ (290) 44
-OP_LE (291) 45
-OP_GE (292) 46
-OP_NE (293) 47
+OP_ASIG (283) 21 22 50
+OP_SUM (284) 23
+OP_RES (285) 24
+OP_DIV (286) 27
+OP_MUL (287) 26
+OP_LT (288) 44
+OP_GT (289) 45
+OP_EQ (290) 46
+OP_LE (291) 47
+OP_GE (292) 48
+OP_NE (293) 49
 
 
 No terminales con las reglas donde aparecen
@@ -132,38 +134,38 @@ declaracion (43)
 listadef (44)
     en la izquierda: 9 10, en la derecha: 6 7 8 10
 bloquemain (45)
-    en la izquierda: 11 12, en la derecha: 1 12 35 36
+    en la izquierda: 11 12, en la derecha: 1 12 37 38
 sentencia (46)
-    en la izquierda: 13 14 15 16 17 18, en la derecha: 11 12
+    en la izquierda: 13 14 15 16 17 18 19 20, en la derecha: 11 12
 asignacion (47)
-    en la izquierda: 19 20, en la derecha: 13
+    en la izquierda: 21 22, en la derecha: 13
 expresion (48)
-    en la izquierda: 21 22 23, en la derecha: 19 21 22 30 33 34 41
-    48
+    en la izquierda: 23 24 25, en la derecha: 21 23 24 32 35 36 43
+    50
 termino (49)
-    en la izquierda: 24 25 26, en la derecha: 21 22 23 24 25
+    en la izquierda: 26 27 28, en la derecha: 23 24 25 26 27
 factor (50)
-    en la izquierda: 27 28 29 30 31 32, en la derecha: 24 25 26
+    en la izquierda: 29 30 31 32 33 34, en la derecha: 26 27 28
 combinatoria (51)
-    en la izquierda: 33, en la derecha: 32
+    en la izquierda: 35, en la derecha: 20 34
 factorial (52)
-    en la izquierda: 34, en la derecha: 31
+    en la izquierda: 36, en la derecha: 19 33
 ciclo (53)
-    en la izquierda: 35, en la derecha: 14
+    en la izquierda: 37, en la derecha: 14
 seleccion (54)
-    en la izquierda: 36, en la derecha: 15
+    en la izquierda: 38, en la derecha: 15
 condicion (55)
-    en la izquierda: 37 38 39 40, en la derecha: 35 36 48
+    en la izquierda: 39 40 41 42, en la derecha: 37 38 50
 argumento (56)
-    en la izquierda: 41, en la derecha: 37 38 39 40
+    en la izquierda: 43, en la derecha: 39 40 41 42
 operador (57)
-    en la izquierda: 42 43 44 45 46 47, en la derecha: 41
+    en la izquierda: 44 45 46 47 48 49, en la derecha: 43
 unario (58)
-    en la izquierda: 48, en la derecha: 16
+    en la izquierda: 50, en la derecha: 16
 display (59)
-    en la izquierda: 49 50, en la derecha: 17
+    en la izquierda: 51 52, en la derecha: 17
 get (60)
-    en la izquierda: 51, en la derecha: 18
+    en la izquierda: 53, en la derecha: 18
 
 
 estado 0
@@ -206,15 +208,19 @@ estado 3
     GET      desplazar e ir al estado 13
     WHILE    desplazar e ir al estado 14
     IF       desplazar e ir al estado 15
+    FACT     desplazar e ir al estado 16
+    COMB     desplazar e ir al estado 17
 
-    bloquemain  ir al estado 16
-    sentencia   ir al estado 17
-    asignacion  ir al estado 18
-    ciclo       ir al estado 19
-    seleccion   ir al estado 20
-    unario      ir al estado 21
-    display     ir al estado 22
-    get         ir al estado 23
+    bloquemain    ir al estado 18
+    sentencia     ir al estado 19
+    asignacion    ir al estado 20
+    combinatoria  ir al estado 21
+    factorial     ir al estado 22
+    ciclo         ir al estado 23
+    seleccion     ir al estado 24
+    unario        ir al estado 25
+    display       ir al estado 26
+    get           ir al estado 27
 
 
 estado 4
@@ -228,21 +234,21 @@ estado 5
 
     8 declaracion: FLOAT . OP_DEF listadef
 
-    OP_DEF  desplazar e ir al estado 24
+    OP_DEF  desplazar e ir al estado 28
 
 
 estado 6
 
     6 declaracion: INT . OP_DEF listadef
 
-    OP_DEF  desplazar e ir al estado 25
+    OP_DEF  desplazar e ir al estado 29
 
 
 estado 7
 
     7 declaracion: STRING . OP_DEF listadef
 
-    OP_DEF  desplazar e ir al estado 26
+    OP_DEF  desplazar e ir al estado 30
 
 
 estado 8
@@ -250,12 +256,12 @@ estado 8
     2 bloquedef: DEFVAR bloquevar . ENDDEF
     5 bloquevar: bloquevar . declaracion
 
-    ENDDEF  desplazar e ir al estado 27
+    ENDDEF  desplazar e ir al estado 31
     FLOAT   desplazar e ir al estado 5
     INT     desplazar e ir al estado 6
     STRING  desplazar e ir al estado 7
 
-    declaracion  ir al estado 28
+    declaracion  ir al estado 32
 
 
 estado 9
@@ -274,44 +280,58 @@ estado 10
 
 estado 11
 
-   19 asignacion: ID . OP_ASIG expresion
-   20           | ID . OP_ASIG CONS_STRING
-   48 unario: ID . OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C
+   21 asignacion: ID . OP_ASIG expresion
+   22           | ID . OP_ASIG CONS_CAD
+   50 unario: ID . OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C
 
-    OP_ASIG  desplazar e ir al estado 29
+    OP_ASIG  desplazar e ir al estado 33
 
 
 estado 12
 
-   49 display: DISPLAY . ID
-   50        | DISPLAY . CONS_STRING
+   51 display: DISPLAY . ID
+   52        | DISPLAY . CONS_CAD
 
-    CONS_STRING  desplazar e ir al estado 30
-    ID           desplazar e ir al estado 31
+    CONS_CAD  desplazar e ir al estado 34
+    ID        desplazar e ir al estado 35
 
 
 estado 13
 
-   51 get: GET . ID
+   53 get: GET . ID
 
-    ID  desplazar e ir al estado 32
+    ID  desplazar e ir al estado 36
 
 
 estado 14
 
-   35 ciclo: WHILE . PAR_A condicion PAR_C bloquemain ENDWHILE
+   37 ciclo: WHILE . PAR_A condicion PAR_C bloquemain ENDWHILE
 
-    PAR_A  desplazar e ir al estado 33
+    PAR_A  desplazar e ir al estado 37
 
 
 estado 15
 
-   36 seleccion: IF . PAR_A condicion PAR_C bloquemain ENDIF
+   38 seleccion: IF . PAR_A condicion PAR_C bloquemain ENDIF
 
-    PAR_A  desplazar e ir al estado 34
+    PAR_A  desplazar e ir al estado 38
 
 
 estado 16
+
+   36 factorial: FACT . PAR_A expresion PAR_C
+
+    PAR_A  desplazar e ir al estado 39
+
+
+estado 17
+
+   35 combinatoria: COMB . PAR_A expresion COMA expresion PAR_C
+
+    PAR_A  desplazar e ir al estado 40
+
+
+estado 18
 
     1 programa: bloquedef bloquemain .
    12 bloquemain: bloquemain . sentencia
@@ -321,964 +341,984 @@ estado 16
     GET      desplazar e ir al estado 13
     WHILE    desplazar e ir al estado 14
     IF       desplazar e ir al estado 15
+    FACT     desplazar e ir al estado 16
+    COMB     desplazar e ir al estado 17
 
     $default  reduce usando la regla 1 (programa)
 
-    sentencia   ir al estado 35
-    asignacion  ir al estado 18
-    ciclo       ir al estado 19
-    seleccion   ir al estado 20
-    unario      ir al estado 21
-    display     ir al estado 22
-    get         ir al estado 23
+    sentencia     ir al estado 41
+    asignacion    ir al estado 20
+    combinatoria  ir al estado 21
+    factorial     ir al estado 22
+    ciclo         ir al estado 23
+    seleccion     ir al estado 24
+    unario        ir al estado 25
+    display       ir al estado 26
+    get           ir al estado 27
 
 
-estado 17
+estado 19
 
    11 bloquemain: sentencia .
 
     $default  reduce usando la regla 11 (bloquemain)
 
 
-estado 18
+estado 20
 
    13 sentencia: asignacion .
 
     $default  reduce usando la regla 13 (sentencia)
 
 
-estado 19
+estado 21
+
+   20 sentencia: combinatoria .
+
+    $default  reduce usando la regla 20 (sentencia)
+
+
+estado 22
+
+   19 sentencia: factorial .
+
+    $default  reduce usando la regla 19 (sentencia)
+
+
+estado 23
 
    14 sentencia: ciclo .
 
     $default  reduce usando la regla 14 (sentencia)
 
 
-estado 20
+estado 24
 
    15 sentencia: seleccion .
 
     $default  reduce usando la regla 15 (sentencia)
 
 
-estado 21
+estado 25
 
    16 sentencia: unario .
 
     $default  reduce usando la regla 16 (sentencia)
 
 
-estado 22
+estado 26
 
    17 sentencia: display .
 
     $default  reduce usando la regla 17 (sentencia)
 
 
-estado 23
+estado 27
 
    18 sentencia: get .
 
     $default  reduce usando la regla 18 (sentencia)
 
 
-estado 24
+estado 28
 
     8 declaracion: FLOAT OP_DEF . listadef
 
-    ID  desplazar e ir al estado 36
+    ID  desplazar e ir al estado 42
 
-    listadef  ir al estado 37
+    listadef  ir al estado 43
 
 
-estado 25
+estado 29
 
     6 declaracion: INT OP_DEF . listadef
 
-    ID  desplazar e ir al estado 36
+    ID  desplazar e ir al estado 42
 
-    listadef  ir al estado 38
+    listadef  ir al estado 44
 
 
-estado 26
+estado 30
 
     7 declaracion: STRING OP_DEF . listadef
 
-    ID  desplazar e ir al estado 36
+    ID  desplazar e ir al estado 42
 
-    listadef  ir al estado 39
+    listadef  ir al estado 45
 
 
-estado 27
+estado 31
 
     2 bloquedef: DEFVAR bloquevar ENDDEF .
 
     $default  reduce usando la regla 2 (bloquedef)
 
 
-estado 28
+estado 32
 
     5 bloquevar: bloquevar declaracion .
 
     $default  reduce usando la regla 5 (bloquevar)
 
 
-estado 29
-
-   19 asignacion: ID OP_ASIG . expresion
-   20           | ID OP_ASIG . CONS_STRING
-   48 unario: ID OP_ASIG . IF PAR_A condicion COMA expresion COMA expresion PAR_C
-
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    CONS_STRING  desplazar e ir al estado 42
-    ID           desplazar e ir al estado 43
-    IF           desplazar e ir al estado 44
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 48
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-
-
-estado 30
-
-   50 display: DISPLAY CONS_STRING .
-
-    $default  reduce usando la regla 50 (display)
-
-
-estado 31
-
-   49 display: DISPLAY ID .
-
-    $default  reduce usando la regla 49 (display)
-
-
-estado 32
-
-   51 get: GET ID .
-
-    $default  reduce usando la regla 51 (get)
-
-
 estado 33
 
-   35 ciclo: WHILE PAR_A . condicion PAR_C bloquemain ENDWHILE
+   21 asignacion: ID OP_ASIG . expresion
+   22           | ID OP_ASIG . CONS_CAD
+   50 unario: ID OP_ASIG . IF PAR_A condicion COMA expresion COMA expresion PAR_C
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    NOT          desplazar e ir al estado 53
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    CONS_CAD     desplazar e ir al estado 48
+    ID           desplazar e ir al estado 49
+    IF           desplazar e ir al estado 50
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
 
-    expresion     ir al estado 54
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-    condicion     ir al estado 55
-    argumento     ir al estado 56
+    expresion     ir al estado 52
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
 
 
 estado 34
 
-   36 seleccion: IF PAR_A . condicion PAR_C bloquemain ENDIF
+   52 display: DISPLAY CONS_CAD .
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    NOT          desplazar e ir al estado 53
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 54
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-    condicion     ir al estado 57
-    argumento     ir al estado 56
+    $default  reduce usando la regla 52 (display)
 
 
 estado 35
+
+   51 display: DISPLAY ID .
+
+    $default  reduce usando la regla 51 (display)
+
+
+estado 36
+
+   53 get: GET ID .
+
+    $default  reduce usando la regla 53 (get)
+
+
+estado 37
+
+   37 ciclo: WHILE PAR_A . condicion PAR_C bloquemain ENDWHILE
+
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    NOT          desplazar e ir al estado 57
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 58
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+    condicion     ir al estado 59
+    argumento     ir al estado 60
+
+
+estado 38
+
+   38 seleccion: IF PAR_A . condicion PAR_C bloquemain ENDIF
+
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    NOT          desplazar e ir al estado 57
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 58
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+    condicion     ir al estado 61
+    argumento     ir al estado 60
+
+
+estado 39
+
+   36 factorial: FACT PAR_A . expresion PAR_C
+
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 62
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+
+
+estado 40
+
+   35 combinatoria: COMB PAR_A . expresion COMA expresion PAR_C
+
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 63
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+
+
+estado 41
 
    12 bloquemain: bloquemain sentencia .
 
     $default  reduce usando la regla 12 (bloquemain)
 
 
-estado 36
+estado 42
 
     9 listadef: ID .
 
     $default  reduce usando la regla 9 (listadef)
 
 
-estado 37
+estado 43
 
     8 declaracion: FLOAT OP_DEF listadef .
    10 listadef: listadef . PYC ID
 
-    PYC  desplazar e ir al estado 58
+    PYC  desplazar e ir al estado 64
 
     $default  reduce usando la regla 8 (declaracion)
 
 
-estado 38
+estado 44
 
     6 declaracion: INT OP_DEF listadef .
    10 listadef: listadef . PYC ID
 
-    PYC  desplazar e ir al estado 58
+    PYC  desplazar e ir al estado 64
 
     $default  reduce usando la regla 6 (declaracion)
 
 
-estado 39
+estado 45
 
     7 declaracion: STRING OP_DEF listadef .
    10 listadef: listadef . PYC ID
 
-    PYC  desplazar e ir al estado 58
+    PYC  desplazar e ir al estado 64
 
     $default  reduce usando la regla 7 (declaracion)
 
 
-estado 40
-
-   29 factor: CONS_REAL .
-
-    $default  reduce usando la regla 29 (factor)
-
-
-estado 41
-
-   28 factor: CONS_ENTERO .
-
-    $default  reduce usando la regla 28 (factor)
-
-
-estado 42
-
-   20 asignacion: ID OP_ASIG CONS_STRING .
-
-    $default  reduce usando la regla 20 (asignacion)
-
-
-estado 43
-
-   27 factor: ID .
-
-    $default  reduce usando la regla 27 (factor)
-
-
-estado 44
-
-   48 unario: ID OP_ASIG IF . PAR_A condicion COMA expresion COMA expresion PAR_C
-
-    PAR_A  desplazar e ir al estado 59
-
-
-estado 45
-
-   34 factorial: FACT . PAR_A expresion PAR_C
-
-    PAR_A  desplazar e ir al estado 60
-
-
 estado 46
 
-   33 combinatoria: COMB . PAR_A expresion COMA expresion PAR_C
-
-    PAR_A  desplazar e ir al estado 61
-
-
-estado 47
-
-   30 factor: PAR_A . expresion PAR_C
-
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 62
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-
-
-estado 48
-
-   19 asignacion: ID OP_ASIG expresion .
-   21 expresion: expresion . OP_SUM termino
-   22          | expresion . OP_RES termino
-
-    OP_SUM  desplazar e ir al estado 63
-    OP_RES  desplazar e ir al estado 64
-
-    $default  reduce usando la regla 19 (asignacion)
-
-
-estado 49
-
-   23 expresion: termino .
-   24 termino: termino . OP_MUL factor
-   25        | termino . OP_DIV factor
-
-    OP_DIV  desplazar e ir al estado 65
-    OP_MUL  desplazar e ir al estado 66
-
-    $default  reduce usando la regla 23 (expresion)
-
-
-estado 50
-
-   26 termino: factor .
-
-    $default  reduce usando la regla 26 (termino)
-
-
-estado 51
-
-   32 factor: combinatoria .
-
-    $default  reduce usando la regla 32 (factor)
-
-
-estado 52
-
-   31 factor: factorial .
+   31 factor: CONS_FLO .
 
     $default  reduce usando la regla 31 (factor)
 
 
+estado 47
+
+   30 factor: CONS_ENTERO .
+
+    $default  reduce usando la regla 30 (factor)
+
+
+estado 48
+
+   22 asignacion: ID OP_ASIG CONS_CAD .
+
+    $default  reduce usando la regla 22 (asignacion)
+
+
+estado 49
+
+   29 factor: ID .
+
+    $default  reduce usando la regla 29 (factor)
+
+
+estado 50
+
+   50 unario: ID OP_ASIG IF . PAR_A condicion COMA expresion COMA expresion PAR_C
+
+    PAR_A  desplazar e ir al estado 65
+
+
+estado 51
+
+   32 factor: PAR_A . expresion PAR_C
+
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 66
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+
+
+estado 52
+
+   21 asignacion: ID OP_ASIG expresion .
+   23 expresion: expresion . OP_SUM termino
+   24          | expresion . OP_RES termino
+
+    OP_SUM  desplazar e ir al estado 67
+    OP_RES  desplazar e ir al estado 68
+
+    $default  reduce usando la regla 21 (asignacion)
+
+
 estado 53
 
-   38 condicion: NOT . argumento
+   25 expresion: termino .
+   26 termino: termino . OP_MUL factor
+   27        | termino . OP_DIV factor
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
+    OP_DIV  desplazar e ir al estado 69
+    OP_MUL  desplazar e ir al estado 70
 
-    expresion     ir al estado 54
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-    argumento     ir al estado 67
+    $default  reduce usando la regla 25 (expresion)
 
 
 estado 54
 
-   21 expresion: expresion . OP_SUM termino
-   22          | expresion . OP_RES termino
-   41 argumento: expresion . operador expresion
+   28 termino: factor .
 
-    OP_SUM  desplazar e ir al estado 63
-    OP_RES  desplazar e ir al estado 64
-    OP_LT   desplazar e ir al estado 68
-    OP_GT   desplazar e ir al estado 69
-    OP_EQ   desplazar e ir al estado 70
-    OP_LE   desplazar e ir al estado 71
-    OP_GE   desplazar e ir al estado 72
-    OP_NE   desplazar e ir al estado 73
-
-    operador  ir al estado 74
+    $default  reduce usando la regla 28 (termino)
 
 
 estado 55
 
-   35 ciclo: WHILE PAR_A condicion . PAR_C bloquemain ENDWHILE
+   34 factor: combinatoria .
 
-    PAR_C  desplazar e ir al estado 75
+    $default  reduce usando la regla 34 (factor)
 
 
 estado 56
 
-   37 condicion: argumento .
-   39          | argumento . AND argumento
-   40          | argumento . OR argumento
+   33 factor: factorial .
 
-    AND  desplazar e ir al estado 76
-    OR   desplazar e ir al estado 77
-
-    $default  reduce usando la regla 37 (condicion)
+    $default  reduce usando la regla 33 (factor)
 
 
 estado 57
 
-   36 seleccion: IF PAR_A condicion . PAR_C bloquemain ENDIF
+   40 condicion: NOT . argumento
 
-    PAR_C  desplazar e ir al estado 78
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 58
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+    argumento     ir al estado 71
 
 
 estado 58
 
-   10 listadef: listadef PYC . ID
+   23 expresion: expresion . OP_SUM termino
+   24          | expresion . OP_RES termino
+   43 argumento: expresion . operador expresion
 
-    ID  desplazar e ir al estado 79
+    OP_SUM  desplazar e ir al estado 67
+    OP_RES  desplazar e ir al estado 68
+    OP_LT   desplazar e ir al estado 72
+    OP_GT   desplazar e ir al estado 73
+    OP_EQ   desplazar e ir al estado 74
+    OP_LE   desplazar e ir al estado 75
+    OP_GE   desplazar e ir al estado 76
+    OP_NE   desplazar e ir al estado 77
+
+    operador  ir al estado 78
 
 
 estado 59
 
-   48 unario: ID OP_ASIG IF PAR_A . condicion COMA expresion COMA expresion PAR_C
+   37 ciclo: WHILE PAR_A condicion . PAR_C bloquemain ENDWHILE
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    NOT          desplazar e ir al estado 53
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 54
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-    condicion     ir al estado 80
-    argumento     ir al estado 56
+    PAR_C  desplazar e ir al estado 79
 
 
 estado 60
 
-   34 factorial: FACT PAR_A . expresion PAR_C
+   39 condicion: argumento .
+   41          | argumento . AND argumento
+   42          | argumento . OR argumento
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
+    AND  desplazar e ir al estado 80
+    OR   desplazar e ir al estado 81
 
-    expresion     ir al estado 81
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
+    $default  reduce usando la regla 39 (condicion)
 
 
 estado 61
 
-   33 combinatoria: COMB PAR_A . expresion COMA expresion PAR_C
+   38 seleccion: IF PAR_A condicion . PAR_C bloquemain ENDIF
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 82
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
+    PAR_C  desplazar e ir al estado 82
 
 
 estado 62
 
-   21 expresion: expresion . OP_SUM termino
-   22          | expresion . OP_RES termino
-   30 factor: PAR_A expresion . PAR_C
+   23 expresion: expresion . OP_SUM termino
+   24          | expresion . OP_RES termino
+   36 factorial: FACT PAR_A expresion . PAR_C
 
     PAR_C   desplazar e ir al estado 83
-    OP_SUM  desplazar e ir al estado 63
-    OP_RES  desplazar e ir al estado 64
+    OP_SUM  desplazar e ir al estado 67
+    OP_RES  desplazar e ir al estado 68
 
 
 estado 63
 
-   21 expresion: expresion OP_SUM . termino
+   23 expresion: expresion . OP_SUM termino
+   24          | expresion . OP_RES termino
+   35 combinatoria: COMB PAR_A expresion . COMA expresion PAR_C
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    termino       ir al estado 84
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
+    COMA    desplazar e ir al estado 84
+    OP_SUM  desplazar e ir al estado 67
+    OP_RES  desplazar e ir al estado 68
 
 
 estado 64
 
-   22 expresion: expresion OP_RES . termino
+   10 listadef: listadef PYC . ID
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    termino       ir al estado 85
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
+    ID  desplazar e ir al estado 85
 
 
 estado 65
 
-   25 termino: termino OP_DIV . factor
+   50 unario: ID OP_ASIG IF PAR_A . condicion COMA expresion COMA expresion PAR_C
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    NOT          desplazar e ir al estado 57
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
 
-    factor        ir al estado 86
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
+    expresion     ir al estado 58
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+    condicion     ir al estado 86
+    argumento     ir al estado 60
 
 
 estado 66
 
-   24 termino: termino OP_MUL . factor
+   23 expresion: expresion . OP_SUM termino
+   24          | expresion . OP_RES termino
+   32 factor: PAR_A expresion . PAR_C
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    factor        ir al estado 87
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
+    PAR_C   desplazar e ir al estado 87
+    OP_SUM  desplazar e ir al estado 67
+    OP_RES  desplazar e ir al estado 68
 
 
 estado 67
 
-   38 condicion: NOT argumento .
+   23 expresion: expresion OP_SUM . termino
 
-    $default  reduce usando la regla 38 (condicion)
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    termino       ir al estado 88
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
 
 
 estado 68
 
-   42 operador: OP_LT .
+   24 expresion: expresion OP_RES . termino
 
-    $default  reduce usando la regla 42 (operador)
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    termino       ir al estado 89
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
 
 
 estado 69
 
-   43 operador: OP_GT .
+   27 termino: termino OP_DIV . factor
 
-    $default  reduce usando la regla 43 (operador)
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    factor        ir al estado 90
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
 
 
 estado 70
 
-   44 operador: OP_EQ .
+   26 termino: termino OP_MUL . factor
 
-    $default  reduce usando la regla 44 (operador)
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    factor        ir al estado 91
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
 
 
 estado 71
 
-   45 operador: OP_LE .
+   40 condicion: NOT argumento .
 
-    $default  reduce usando la regla 45 (operador)
+    $default  reduce usando la regla 40 (condicion)
 
 
 estado 72
 
-   46 operador: OP_GE .
+   44 operador: OP_LT .
 
-    $default  reduce usando la regla 46 (operador)
+    $default  reduce usando la regla 44 (operador)
 
 
 estado 73
 
-   47 operador: OP_NE .
+   45 operador: OP_GT .
 
-    $default  reduce usando la regla 47 (operador)
+    $default  reduce usando la regla 45 (operador)
 
 
 estado 74
 
-   41 argumento: expresion operador . expresion
+   46 operador: OP_EQ .
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 88
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
+    $default  reduce usando la regla 46 (operador)
 
 
 estado 75
 
-   35 ciclo: WHILE PAR_A condicion PAR_C . bloquemain ENDWHILE
+   47 operador: OP_LE .
 
-    ID       desplazar e ir al estado 11
-    DISPLAY  desplazar e ir al estado 12
-    GET      desplazar e ir al estado 13
-    WHILE    desplazar e ir al estado 14
-    IF       desplazar e ir al estado 15
-
-    bloquemain  ir al estado 89
-    sentencia   ir al estado 17
-    asignacion  ir al estado 18
-    ciclo       ir al estado 19
-    seleccion   ir al estado 20
-    unario      ir al estado 21
-    display     ir al estado 22
-    get         ir al estado 23
+    $default  reduce usando la regla 47 (operador)
 
 
 estado 76
 
-   39 condicion: argumento AND . argumento
+   48 operador: OP_GE .
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 54
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-    argumento     ir al estado 90
+    $default  reduce usando la regla 48 (operador)
 
 
 estado 77
 
-   40 condicion: argumento OR . argumento
+   49 operador: OP_NE .
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 54
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-    argumento     ir al estado 91
+    $default  reduce usando la regla 49 (operador)
 
 
 estado 78
 
-   36 seleccion: IF PAR_A condicion PAR_C . bloquemain ENDIF
+   43 argumento: expresion operador . expresion
+
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 92
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+
+
+estado 79
+
+   37 ciclo: WHILE PAR_A condicion PAR_C . bloquemain ENDWHILE
 
     ID       desplazar e ir al estado 11
     DISPLAY  desplazar e ir al estado 12
     GET      desplazar e ir al estado 13
     WHILE    desplazar e ir al estado 14
     IF       desplazar e ir al estado 15
+    FACT     desplazar e ir al estado 16
+    COMB     desplazar e ir al estado 17
 
-    bloquemain  ir al estado 92
-    sentencia   ir al estado 17
-    asignacion  ir al estado 18
-    ciclo       ir al estado 19
-    seleccion   ir al estado 20
-    unario      ir al estado 21
-    display     ir al estado 22
-    get         ir al estado 23
+    bloquemain    ir al estado 93
+    sentencia     ir al estado 19
+    asignacion    ir al estado 20
+    combinatoria  ir al estado 21
+    factorial     ir al estado 22
+    ciclo         ir al estado 23
+    seleccion     ir al estado 24
+    unario        ir al estado 25
+    display       ir al estado 26
+    get           ir al estado 27
 
 
-estado 79
+estado 80
+
+   41 condicion: argumento AND . argumento
+
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 58
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+    argumento     ir al estado 94
+
+
+estado 81
+
+   42 condicion: argumento OR . argumento
+
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 58
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+    argumento     ir al estado 95
+
+
+estado 82
+
+   38 seleccion: IF PAR_A condicion PAR_C . bloquemain ENDIF
+
+    ID       desplazar e ir al estado 11
+    DISPLAY  desplazar e ir al estado 12
+    GET      desplazar e ir al estado 13
+    WHILE    desplazar e ir al estado 14
+    IF       desplazar e ir al estado 15
+    FACT     desplazar e ir al estado 16
+    COMB     desplazar e ir al estado 17
+
+    bloquemain    ir al estado 96
+    sentencia     ir al estado 19
+    asignacion    ir al estado 20
+    combinatoria  ir al estado 21
+    factorial     ir al estado 22
+    ciclo         ir al estado 23
+    seleccion     ir al estado 24
+    unario        ir al estado 25
+    display       ir al estado 26
+    get           ir al estado 27
+
+
+estado 83
+
+   36 factorial: FACT PAR_A expresion PAR_C .
+
+    $default  reduce usando la regla 36 (factorial)
+
+
+estado 84
+
+   35 combinatoria: COMB PAR_A expresion COMA . expresion PAR_C
+
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 97
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+
+
+estado 85
 
    10 listadef: listadef PYC ID .
 
     $default  reduce usando la regla 10 (listadef)
 
 
-estado 80
-
-   48 unario: ID OP_ASIG IF PAR_A condicion . COMA expresion COMA expresion PAR_C
-
-    COMA  desplazar e ir al estado 93
-
-
-estado 81
-
-   21 expresion: expresion . OP_SUM termino
-   22          | expresion . OP_RES termino
-   34 factorial: FACT PAR_A expresion . PAR_C
-
-    PAR_C   desplazar e ir al estado 94
-    OP_SUM  desplazar e ir al estado 63
-    OP_RES  desplazar e ir al estado 64
-
-
-estado 82
-
-   21 expresion: expresion . OP_SUM termino
-   22          | expresion . OP_RES termino
-   33 combinatoria: COMB PAR_A expresion . COMA expresion PAR_C
-
-    COMA    desplazar e ir al estado 95
-    OP_SUM  desplazar e ir al estado 63
-    OP_RES  desplazar e ir al estado 64
-
-
-estado 83
-
-   30 factor: PAR_A expresion PAR_C .
-
-    $default  reduce usando la regla 30 (factor)
-
-
-estado 84
-
-   21 expresion: expresion OP_SUM termino .
-   24 termino: termino . OP_MUL factor
-   25        | termino . OP_DIV factor
-
-    OP_DIV  desplazar e ir al estado 65
-    OP_MUL  desplazar e ir al estado 66
-
-    $default  reduce usando la regla 21 (expresion)
-
-
-estado 85
-
-   22 expresion: expresion OP_RES termino .
-   24 termino: termino . OP_MUL factor
-   25        | termino . OP_DIV factor
-
-    OP_DIV  desplazar e ir al estado 65
-    OP_MUL  desplazar e ir al estado 66
-
-    $default  reduce usando la regla 22 (expresion)
-
-
 estado 86
 
-   25 termino: termino OP_DIV factor .
+   50 unario: ID OP_ASIG IF PAR_A condicion . COMA expresion COMA expresion PAR_C
 
-    $default  reduce usando la regla 25 (termino)
+    COMA  desplazar e ir al estado 98
 
 
 estado 87
 
-   24 termino: termino OP_MUL factor .
+   32 factor: PAR_A expresion PAR_C .
 
-    $default  reduce usando la regla 24 (termino)
+    $default  reduce usando la regla 32 (factor)
 
 
 estado 88
 
-   21 expresion: expresion . OP_SUM termino
-   22          | expresion . OP_RES termino
-   41 argumento: expresion operador expresion .
+   23 expresion: expresion OP_SUM termino .
+   26 termino: termino . OP_MUL factor
+   27        | termino . OP_DIV factor
 
-    OP_SUM  desplazar e ir al estado 63
-    OP_RES  desplazar e ir al estado 64
+    OP_DIV  desplazar e ir al estado 69
+    OP_MUL  desplazar e ir al estado 70
 
-    $default  reduce usando la regla 41 (argumento)
+    $default  reduce usando la regla 23 (expresion)
 
 
 estado 89
 
+   24 expresion: expresion OP_RES termino .
+   26 termino: termino . OP_MUL factor
+   27        | termino . OP_DIV factor
+
+    OP_DIV  desplazar e ir al estado 69
+    OP_MUL  desplazar e ir al estado 70
+
+    $default  reduce usando la regla 24 (expresion)
+
+
+estado 90
+
+   27 termino: termino OP_DIV factor .
+
+    $default  reduce usando la regla 27 (termino)
+
+
+estado 91
+
+   26 termino: termino OP_MUL factor .
+
+    $default  reduce usando la regla 26 (termino)
+
+
+estado 92
+
+   23 expresion: expresion . OP_SUM termino
+   24          | expresion . OP_RES termino
+   43 argumento: expresion operador expresion .
+
+    OP_SUM  desplazar e ir al estado 67
+    OP_RES  desplazar e ir al estado 68
+
+    $default  reduce usando la regla 43 (argumento)
+
+
+estado 93
+
    12 bloquemain: bloquemain . sentencia
-   35 ciclo: WHILE PAR_A condicion PAR_C bloquemain . ENDWHILE
+   37 ciclo: WHILE PAR_A condicion PAR_C bloquemain . ENDWHILE
 
     ID        desplazar e ir al estado 11
     DISPLAY   desplazar e ir al estado 12
     GET       desplazar e ir al estado 13
     WHILE     desplazar e ir al estado 14
-    ENDWHILE  desplazar e ir al estado 96
+    ENDWHILE  desplazar e ir al estado 99
     IF        desplazar e ir al estado 15
+    FACT      desplazar e ir al estado 16
+    COMB      desplazar e ir al estado 17
 
-    sentencia   ir al estado 35
-    asignacion  ir al estado 18
-    ciclo       ir al estado 19
-    seleccion   ir al estado 20
-    unario      ir al estado 21
-    display     ir al estado 22
-    get         ir al estado 23
-
-
-estado 90
-
-   39 condicion: argumento AND argumento .
-
-    $default  reduce usando la regla 39 (condicion)
+    sentencia     ir al estado 41
+    asignacion    ir al estado 20
+    combinatoria  ir al estado 21
+    factorial     ir al estado 22
+    ciclo         ir al estado 23
+    seleccion     ir al estado 24
+    unario        ir al estado 25
+    display       ir al estado 26
+    get           ir al estado 27
 
 
-estado 91
+estado 94
 
-   40 condicion: argumento OR argumento .
+   41 condicion: argumento AND argumento .
 
-    $default  reduce usando la regla 40 (condicion)
+    $default  reduce usando la regla 41 (condicion)
 
 
-estado 92
+estado 95
+
+   42 condicion: argumento OR argumento .
+
+    $default  reduce usando la regla 42 (condicion)
+
+
+estado 96
 
    12 bloquemain: bloquemain . sentencia
-   36 seleccion: IF PAR_A condicion PAR_C bloquemain . ENDIF
+   38 seleccion: IF PAR_A condicion PAR_C bloquemain . ENDIF
 
     ID       desplazar e ir al estado 11
     DISPLAY  desplazar e ir al estado 12
     GET      desplazar e ir al estado 13
     WHILE    desplazar e ir al estado 14
     IF       desplazar e ir al estado 15
-    ENDIF    desplazar e ir al estado 97
+    ENDIF    desplazar e ir al estado 100
+    FACT     desplazar e ir al estado 16
+    COMB     desplazar e ir al estado 17
 
-    sentencia   ir al estado 35
-    asignacion  ir al estado 18
-    ciclo       ir al estado 19
-    seleccion   ir al estado 20
-    unario      ir al estado 21
-    display     ir al estado 22
-    get         ir al estado 23
-
-
-estado 93
-
-   48 unario: ID OP_ASIG IF PAR_A condicion COMA . expresion COMA expresion PAR_C
-
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 98
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-
-
-estado 94
-
-   34 factorial: FACT PAR_A expresion PAR_C .
-
-    $default  reduce usando la regla 34 (factorial)
-
-
-estado 95
-
-   33 combinatoria: COMB PAR_A expresion COMA . expresion PAR_C
-
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 99
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
-
-
-estado 96
-
-   35 ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE .
-
-    $default  reduce usando la regla 35 (ciclo)
+    sentencia     ir al estado 41
+    asignacion    ir al estado 20
+    combinatoria  ir al estado 21
+    factorial     ir al estado 22
+    ciclo         ir al estado 23
+    seleccion     ir al estado 24
+    unario        ir al estado 25
+    display       ir al estado 26
+    get           ir al estado 27
 
 
 estado 97
 
-   36 seleccion: IF PAR_A condicion PAR_C bloquemain ENDIF .
+   23 expresion: expresion . OP_SUM termino
+   24          | expresion . OP_RES termino
+   35 combinatoria: COMB PAR_A expresion COMA expresion . PAR_C
 
-    $default  reduce usando la regla 36 (seleccion)
+    PAR_C   desplazar e ir al estado 101
+    OP_SUM  desplazar e ir al estado 67
+    OP_RES  desplazar e ir al estado 68
 
 
 estado 98
 
-   21 expresion: expresion . OP_SUM termino
-   22          | expresion . OP_RES termino
-   48 unario: ID OP_ASIG IF PAR_A condicion COMA expresion . COMA expresion PAR_C
+   50 unario: ID OP_ASIG IF PAR_A condicion COMA . expresion COMA expresion PAR_C
 
-    COMA    desplazar e ir al estado 100
-    OP_SUM  desplazar e ir al estado 63
-    OP_RES  desplazar e ir al estado 64
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 102
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
 
 
 estado 99
 
-   21 expresion: expresion . OP_SUM termino
-   22          | expresion . OP_RES termino
-   33 combinatoria: COMB PAR_A expresion COMA expresion . PAR_C
+   37 ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE .
 
-    PAR_C   desplazar e ir al estado 101
-    OP_SUM  desplazar e ir al estado 63
-    OP_RES  desplazar e ir al estado 64
+    $default  reduce usando la regla 37 (ciclo)
 
 
 estado 100
 
-   48 unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA . expresion PAR_C
+   38 seleccion: IF PAR_A condicion PAR_C bloquemain ENDIF .
 
-    CONS_REAL    desplazar e ir al estado 40
-    CONS_ENTERO  desplazar e ir al estado 41
-    ID           desplazar e ir al estado 43
-    FACT         desplazar e ir al estado 45
-    COMB         desplazar e ir al estado 46
-    PAR_A        desplazar e ir al estado 47
-
-    expresion     ir al estado 102
-    termino       ir al estado 49
-    factor        ir al estado 50
-    combinatoria  ir al estado 51
-    factorial     ir al estado 52
+    $default  reduce usando la regla 38 (seleccion)
 
 
 estado 101
 
-   33 combinatoria: COMB PAR_A expresion COMA expresion PAR_C .
+   35 combinatoria: COMB PAR_A expresion COMA expresion PAR_C .
 
-    $default  reduce usando la regla 33 (combinatoria)
+    $default  reduce usando la regla 35 (combinatoria)
 
 
 estado 102
 
-   21 expresion: expresion . OP_SUM termino
-   22          | expresion . OP_RES termino
-   48 unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion . PAR_C
+   23 expresion: expresion . OP_SUM termino
+   24          | expresion . OP_RES termino
+   50 unario: ID OP_ASIG IF PAR_A condicion COMA expresion . COMA expresion PAR_C
 
-    PAR_C   desplazar e ir al estado 103
-    OP_SUM  desplazar e ir al estado 63
-    OP_RES  desplazar e ir al estado 64
+    COMA    desplazar e ir al estado 103
+    OP_SUM  desplazar e ir al estado 67
+    OP_RES  desplazar e ir al estado 68
 
 
 estado 103
 
-   48 unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C .
+   50 unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA . expresion PAR_C
 
-    $default  reduce usando la regla 48 (unario)
+    CONS_FLO     desplazar e ir al estado 46
+    CONS_ENTERO  desplazar e ir al estado 47
+    ID           desplazar e ir al estado 49
+    FACT         desplazar e ir al estado 16
+    COMB         desplazar e ir al estado 17
+    PAR_A        desplazar e ir al estado 51
+
+    expresion     ir al estado 104
+    termino       ir al estado 53
+    factor        ir al estado 54
+    combinatoria  ir al estado 55
+    factorial     ir al estado 56
+
+
+estado 104
+
+   23 expresion: expresion . OP_SUM termino
+   24          | expresion . OP_RES termino
+   50 unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion . PAR_C
+
+    PAR_C   desplazar e ir al estado 105
+    OP_SUM  desplazar e ir al estado 67
+    OP_RES  desplazar e ir al estado 68
+
+
+estado 105
+
+   50 unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C .
+
+    $default  reduce usando la regla 50 (unario)

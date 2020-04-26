@@ -13,7 +13,7 @@ int crearTS();
 %}
 
 %token DEFVAR ENDDEF
-%token CONS_REAL CONS_ENTERO CONS_STRING ID
+%token CONS_FLO CONS_ENTERO CONS_CAD ID
 %token FLOAT INT STRING
 %token DISPLAY GET
 %token WHILE ENDWHILE IF ENDIF
@@ -48,60 +48,62 @@ sentencia: asignacion {printf("Regla 13: <sentencia> ::= <asignacion>\n");}
 			| unario {printf("Regla 16: <sentencia> ::= <unario>\n");}
 			| display {printf("Regla 17: <sentencia> ::= <display>\n");}
 			| get {printf("Regla 18: <sentencia> ::= <get>\n");};
+			| factorial {printf("Regla 19: <sentencia> ::= <factorial>\n");};
+			| combinatoria {printf("Regla 20: <sentencia> ::= <combinatoria>\n");};
 
-asignacion: ID OP_ASIG expresion {printf("Regla 19: <asignacion> ::= ID OP_ASIG <expresion>\n");}
-			| ID OP_ASIG CONS_STRING {printf("Regla 20: <asignacion> ::= ID OP_ASIG CONS_STRING\n");};
+asignacion: ID OP_ASIG expresion {printf("Regla 21 <asignacion> ::= ID OP_ASIG <expresion>\n");}
+			| ID OP_ASIG CONS_CAD {printf("Regla 22: <asignacion> ::= ID OP_ASIG CONS_CAD\n");};
 
-expresion: expresion OP_SUM termino {printf("Regla 21: <expresion> ::= <expresion> OP_SUM <termino>\n");}
-			| expresion OP_RES termino {printf("Regla 22: <expresion> ::= <expresion> OP_RES <termino>\n");}
-			| termino {printf("Regla 23: <expresion> ::= <termino>\n");};
+expresion: expresion OP_SUM termino {printf("Regla 23: <expresion> ::= <expresion> OP_SUM <termino>\n");}
+			| expresion OP_RES termino {printf("Regla 24: <expresion> ::= <expresion> OP_RES <termino>\n");}
+			| termino {printf("Regla 25: <expresion> ::= <termino>\n");};
 			
-termino: termino OP_MUL factor {printf("Regla 24: <termino> ::= <termino> OP_MUL <factor>\n");}
-		 | termino OP_DIV factor {printf("Regla 25: <termino> ::= <termino> OP_DIV <factor>\n");}
-		 | factor {printf("Regla 26: <termino> ::= <factor>\n");};
+termino: termino OP_MUL factor {printf("Regla 26: <termino> ::= <termino> OP_MUL <factor>\n");}
+		 | termino OP_DIV factor {printf("Regla 27: <termino> ::= <termino> OP_DIV <factor>\n");}
+		 | factor {printf("Regla 28: <termino> ::= <factor>\n");};
 		 
-factor: ID {printf("Regla 27: <factor> ::= ID\n");}
-		| CONS_ENTERO {printf("Regla 28: <factor> ::= CONS_ENTERO\n");}
-		| CONS_REAL {printf("Regla 29: <factor> ::= CONS_REAL\n");}
-		| PAR_A expresion PAR_C {printf("Regla 30: <factor> ::= PAR_A <expresion> PAR_C\n");}
-		| factorial {printf("Regla 31: <factor> ::= <factorial>\n");}
-		| combinatoria {printf("Regla 32: <factor> ::= <combinatoria>\n");};
+factor: ID {printf("Regla 29: <factor> ::= ID\n");}
+		| CONS_ENTERO {printf("Regla 30: <factor> ::= CONS_ENTERO\n");}
+		| CONS_FLO {printf("Regla 31: <factor> ::= CONS_FLO\n");}
+		| PAR_A expresion PAR_C {printf("Regla 31: <factor> ::= PAR_A <expresion> PAR_C\n");}
+		| factorial {printf("Regla 32: <factor> ::= <factorial>\n");}
+		| combinatoria {printf("Regla 33: <factor> ::= <combinatoria>\n");};
 		
-combinatoria: COMB PAR_A expresion COMA expresion PAR_C {printf("Regla 33: <combinatoria> ::= COMB PAR_A <expresion> COMA <expresion> PAR_C\n");};
+combinatoria: COMB PAR_A expresion COMA expresion PAR_C {printf("Regla 34: <combinatoria> ::= COMB PAR_A <expresion> COMA <expresion> PAR_C\n");};
 
-factorial: FACT PAR_A expresion PAR_C {printf("Regla 34: <factorial> ::= FACT PAR_A <expresion> PAR_C\n");};
+factorial: FACT PAR_A expresion PAR_C {printf("Regla 35: <factorial> ::= FACT PAR_A <expresion> PAR_C\n");};
 
-ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE {printf("Regla 35: <ciclo> ::= WHILE PAR_A <condicion> PAR_C <bloquemain> ENDWHILE\n");};
+ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE {printf("Regla 36: <ciclo> ::= WHILE PAR_A <condicion> PAR_C <bloquemain> ENDWHILE\n");};
 
-seleccion: IF PAR_A condicion PAR_C bloquemain ENDIF {printf("Regla 36: <seleccion> ::= IF PAR_A <condicion> PAR_C <bloquemain> ENDIF\n");};
+seleccion: IF PAR_A condicion PAR_C bloquemain ENDIF {printf("Regla 37: <seleccion> ::= IF PAR_A <condicion> PAR_C <bloquemain> ENDIF\n");};
 
-condicion: argumento {printf("Regla 37: <condicion> ::= <argumento>\n");}
-			| NOT argumento {printf("Regla 38: <condicion> ::= NOT argumento\n");}
-			| argumento AND argumento {printf("Regla 39: <condicion> ::= <argumento> AND <argumento>\n");}
-			| argumento OR  argumento {printf("Regla 40: <condicion> ::= <argumento> OR  <argumento>\n");};
+condicion: argumento {printf("Regla 38: <condicion> ::= <argumento>\n");}
+			| NOT argumento {printf("Regla 39: <condicion> ::= NOT argumento\n");}
+			| argumento AND argumento {printf("Regla 40: <condicion> ::= <argumento> AND <argumento>\n");}
+			| argumento OR  argumento {printf("Regla 41: <condicion> ::= <argumento> OR  <argumento>\n");};
 
-argumento: expresion operador expresion {printf("Regla 41: <argumento> ::= <expresion> <operador> <expresion>\n");};
+argumento: expresion operador expresion {printf("Regla 42: <argumento> ::= <expresion> <operador> <expresion>\n");};
 			
-operador: OP_LT {printf("Regla 42: <operador> ::= OP_LT\n");}
-			| OP_GT {printf("Regla 43: <operador> ::= OP_GT\n");}
-			| OP_EQ {printf("Regla 44: <operador> ::= OP_EQ\n");}
-			| OP_LE {printf("Regla 45: <operador> ::= OP_LE\n");}
-			| OP_GE {printf("Regla 46: <operador> ::= OP_GE\n");}
-			| OP_NE {printf("Regla 47: <operador> ::= OP_NE\n");};
+operador: OP_LT {printf("Regla 43: <operador> ::= OP_LT\n");}
+			| OP_GT {printf("Regla 44: <operador> ::= OP_GT\n");}
+			| OP_EQ {printf("Regla 45: <operador> ::= OP_EQ\n");}
+			| OP_LE {printf("Regla 46: <operador> ::= OP_LE\n");}
+			| OP_GE {printf("Regla 47: <operador> ::= OP_GE\n");}
+			| OP_NE {printf("Regla 48: <operador> ::= OP_NE\n");};
 		
-unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C {printf("Regla 48: <unario> ::= ID OP_ASIG IF PAR_A <condicion> COMA <expresion> COMA <expresion> PAR_C\n");};
+unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C {printf("Regla 49: <unario> ::= ID OP_ASIG IF PAR_A <condicion> COMA <expresion> COMA <expresion> PAR_C\n");};
 
-display: DISPLAY ID {printf("Regla 49: <display> ::= DISPLAY ID\n");}	
-		 | DISPLAY CONS_STRING {printf("Regla 50: <display> ::= DISPLAY CONS_STRING\n");};
+display: DISPLAY ID {printf("Regla 50: <display> ::= DISPLAY ID\n");}	
+		 | DISPLAY CONS_CAD {printf("Regla 51: <display> ::= DISPLAY CONS_CAD\n");};
 
-get: GET ID {printf("Regla 51: <get> ::= GET ID\n");};
+get: GET ID {printf("Regla 52: <get> ::= GET ID\n");};
 %%
 
 int main(int argc,char *argv[])
 {
 	if ((yyin = fopen(argv[1], "rt")) == NULL)
 	{
-		printf("No se puede abrir el archivo: %s", argv[1]);
+		printf("No se puede abrir el archivo: %s\n", argv[1]);
 		return 1; 
 	}
 	else
@@ -130,12 +132,12 @@ int crearTS()
 {
 	if ((ts = fopen("ts.txt", "w")) == NULL)
 	{
-		printf("No se puede abrir el archivo ts.txt");
+		printf("No se puede abrir el archivo ts.txt\n");
 		return 0;
 	}
 	else 
 	{
-		fprintf(ts, "%s\t%s\t%s\t%s", "NOMBRE", "TIPODATO", "VALOR", "LONGITUD");
+		fprintf(ts, "%s\t%s\t%s\t%s\n", "NOMBRE", "TIPODATO", "VALOR", "LONGITUD");
 	}
 	fclose(ts);
 	return 1;

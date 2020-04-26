@@ -28,15 +28,14 @@ int validarReal(double num);
 
 DIGITO 			[0-9]
 LETRA 			[a-zA-Z]
-BLANCO			{" "}
-COMILLAS		{"\""}
-SIMBOLO			( "@" | "%" | {BLANCO} | ":" | {COMILLAS} )
-CONS_REAL		( {DIGITO}+"."{DIGITO}+ | {DIGITO}*"."{DIGITO}+ | {DIGITO}+"."{DIGITO}* )
+SIMBOLO			("-"|"@"|"%"|" "|":"|"\n"|"\t")
+CONS_FLO		({DIGITO}+"."{DIGITO}+|{DIGITO}*"."{DIGITO}+|{DIGITO}+"."{DIGITO}*)
 CONS_ENTERO		{DIGITO}+
-CONS_STRING		{COMILLAS}( {LETRA}|{SIMBOLO}|{DIGITO}|{BLANCO} )*{COMILLAS}
+ALFANUMERICO	({LETRA}|{SIMBOLO}|{DIGITO})*
+CONS_CAD		\"({ALFANUMERICO})\"
 ID				{LETRA}({LETRA}|{DIGITO})*
-COMEN			{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})*{"/***"}
-COMEN_ANI		{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})* {COMEN}? ({DIGITO}|{SIMBOLO}|{LETRA})* {"/***"}
+COMEN			"***/"({ALFANUMERICO})"/***"
+COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
 
 %%
 "DEFVAR"		{return DEFVAR;}
@@ -71,69 +70,109 @@ COMEN_ANI		{"***/"}({DIGITO}|{SIMBOLO}|{LETRA})* {COMEN}? ({DIGITO}|{SIMBOLO}|{L
 "<="			{return OP_LE;}
 ">="			{return OP_GE;}
 "!="			{return OP_NE;}
-"{CONS_REAL}"	{if (validarReal(atof(yytext))) { insertarEnTS(yytext, 0); return CONS_REAL; } else { printf("La constante esta fuera de rango %s", yytext); }}
-"{CONS_ENTERO}"	{if (validarInteger(atoi(yytext))) { insertarEnTS(yytext, 0); return CONS_ENTERO; } else { printf("La constante esta fuera de rango %s", yytext); }}
-"{CONS_STRING}"	{if (validarString(yytext)) { insertarEnTS(yytext, 1); return CONS_STRING; } else { printf("La constante excede los caracteres permitidos %d", strlen(yytext)); }}
-"{ID}"			{strcpy(regTS.nombre, yytext); return ID;}
-"{COMEN}"		{ }
-"{COMEN_ANI}"	{ }
-"{BLANCO}"		{ }
-\t				{ }
-\n				{ }
+{CONS_FLO}		{if (validarReal(atof(yytext))) { insertarEnTS(yytext, 0); return CONS_FLO; } else { printf("La constante esta fuera de rango %s\n", yytext); }}
+{CONS_ENTERO}	{if (validarInteger(atoi(yytext))) { insertarEnTS(yytext, 0); return CONS_ENTERO; } else { printf("La constante esta fuera de rango %s\n", yytext); }}
+{CONS_CAD}		{if (validarString(yytext)) {insertarEnTS(yytext, 1); return CONS_CAD;} else {printf("La constante excede los caracteres permitidos %d\n", strlen(yytext));}}
+{ID}			{strcpy(regTS.nombre, yytext); insertarVarEnTS(); return ID;}
+{COMEN}			{ }
+{COMEN_ANI}		{ }
+" "				{ }
+"\t"			{ }
+"\n"			{ }
 %%
 
 void insertarEnTS(char *yytext, int isString)
 {
 	if ((ts = fopen("ts.txt", "a")) == NULL)
 	{
-		printf("No se puede abrir el archivo ts.txt");
+		printf("No se puede abrir el archivo ts.txt\n");
 	}
 	else 
 	{
-		if (isString)
+		if(!guardadoEnTabla(yytext))
 		{
-			fprintf(ts, "_%s\t\t%s\t%d", yytext, yytext, strlen(yytext));
-		}
-		else 
-		{
-			fprintf(ts, "_%s\t\t%s\t", yytext, yytext);
+			if (isString)
+			{
+				fprintf(ts, "_%s\t\t\t%s\t%d\n", yytext, yytext, strlen(yytext));
+			}
+			else 
+			{
+				fprintf(ts, "_%s\t\t\t%s\t\n", yytext, yytext);
+			}
 		}
 	}
 	fclose(ts);
 }
 
-void insertarVarEnTS() {
+void insertarVarEnTS() 
+{
 	if ((ts = fopen("ts.txt", "a")) == NULL)
 	{
-		printf("No se puede abrir el archivo: ts.txt");
+		printf("No se puede abrir el archivo: ts.txt\n");
 	}
 	else 
 	{
-		fprintf(ts, "%s\t%s\t-\t", regTS.nombre, regTS.tipo);
+		if(!guardadoEnTabla(regTS.nombre))
+		{
+			fprintf(ts, "%s\t\t\t\t\t%s\t-\t\n", regTS.nombre, regTS.tipo);
+		}
 	}
 	fclose(ts);
 }
 
-int validarString(char *palabra) {
-    if (strlen(palabra) <= 30) {
+void guardadoEnTabla(char *yytext)
+{
+    char str[100];
+    if ((ts = fopen("ts.txt", "r")) == NULL)
+    {
+        printf("No se puede abrir el archivo ts.txt");
+    }
+    else
+    {
+        while(fgets(str,100,fp)!=NULL))
+		{
+            if(strstr(str, yytext) != NULL)
+			{
+                return 1;
+            }
+        }
+    }
+    fclose(ts);
+    return 0;
+}
+
+int validarString(char *palabra) 
+{
+    if (strlen(palabra) <= 30) 
+	{
 		return 1;
-    } else {
+    } 
+	else 
+	{
         return 0;
     }
 }
 
-int validarInteger(int num) {
-    if ( 0 <= num  &&  num <= 65535) {
+int validarInteger(int num) 
+{
+    if ( 0 <= num  &&  num <= 65535)
+	{
 		return 1;
-    } else {
+    } 
+	else
+	{
         return 0;
     }
 }
 
-int validarReal(double num) {
-    if ( num >= 0.0 && num <= pow(3.4,+38)) {
+int validarReal(double num)
+{
+    if ( num >= 0.0 && num <= pow(3.4,+38))
+	{
         return 1;
-    } else {
+    } 
+	else 
+	{
         return 0;
     }
 }

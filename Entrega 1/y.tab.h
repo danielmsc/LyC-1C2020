@@ -41,9 +41,9 @@
    enum yytokentype {
      DEFVAR = 258,
      ENDDEF = 259,
-     CONS_REAL = 260,
+     CONS_FLO = 260,
      CONS_ENTERO = 261,
-     CONS_STRING = 262,
+     CONS_CAD = 262,
      ID = 263,
      FLOAT = 264,
      INT = 265,
@@ -80,9 +80,9 @@
 /* Tokens.  */
 #define DEFVAR 258
 #define ENDDEF 259
-#define CONS_REAL 260
+#define CONS_FLO 260
 #define CONS_ENTERO 261
-#define CONS_STRING 262
+#define CONS_CAD 262
 #define ID 263
 #define FLOAT 264
 #define INT 265
