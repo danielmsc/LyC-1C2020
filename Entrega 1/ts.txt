@@ -14,4 +14,17 @@ _2                              |                                | 2            
 _99999.99                       |                                | 99999.99                       |
 _99.                            |                                | 99.                            |
 _.9999                          |                                | .9999                          |
-_hola mundo                     |                                | hola mundo                     | 10                            
+_5                              |                                | 5                              |
+_45                             |                                | 45                             |
+_6                              |                                | 6                              |
+_3                              |                                | 3                              |
+_0                              |                                | 0                              |
+_b es mayor que cero            |                                | b es mayor que cero            | 19                            
+_Verdadero                      |                                | Verdadero                      | 9                             
+_1                              |                                | 1                              |
+_Cantidad de alumnos            |                                | Cantidad de alumnos            | 19                            
+_10                             |                                | 10                             |
+_While: 10 iteraciones          |                                | While: 10 iteraciones          | 21                            
+_Factorial de 4                 |                                | Factorial de 4                 | 14                            
+_Combinatorio de 6 y 2          |                                | Combinatorio de 6 y 2          | 21                            
+_5.5                            |                                | 5.5                            |
