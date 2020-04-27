@@ -75,7 +75,7 @@ COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
 "!="			{return OP_NE;}
 {CONS_FLO}		{if (validarReal(atof(yytext))) { insertarEnTS(yytext, 0); yylval.overflow = 0; } else { printf("La constante esta fuera de rango %s\n", yytext); yylval.overflow = 1; } return CONS_FLO; }
 {CONS_ENTERO}	{if (validarInteger(atoi(yytext))) { insertarEnTS(yytext, 0); yylval.overflow = 0; } else { printf("La constante esta fuera de rango %s\n", yytext); yylval.overflow = 1;} return CONS_ENTERO; }
-{CONS_CAD}		{if (validarString(yytext)) { insertarEnTS(yytext, 1); yylval.overflow = 0; } else {printf("La constante excede los caracteres permitidos %d\n", strlen(yytext) - 2); yylval.overflow = 1;} return CONS_CAD;}
+{CONS_CAD}		{ if (validarString(yytext)) { insertarEnTS(yytext, 1); return CONS_CAD;} else { printf("La constante string excede el maximo permitido\n"); } }
 {ID}			{strcpy(regTS.nombre, yytext); insertarVarEnTS(); yylval.id = strdup(yytext); return ID;}
 {COMEN}			{ }
 {COMEN_ANI}		{ }

@@ -15,12 +15,6 @@ a1 := 99999.99
 p2 := 99.
 p3 := .9999
 
- 
-
-***/ Constantes string /***
-variable1 := "Hola mundo111111111111111111111111"
-
- 
 
 ***/ Asignacion simple y Variables numericas /***
 
@@ -87,5 +81,3 @@ WHILE (a > 5)
 		ENDIF
 	ENDWHILE
 ENDWHILE
-
-variable2 := "LyC@unlam%"

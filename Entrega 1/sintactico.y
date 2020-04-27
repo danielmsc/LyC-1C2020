@@ -29,6 +29,7 @@ void buscarTipoEnTS(char *id);
 	int overflow;
 }
 
+%right OP_ASIG
 %token DEFVAR ENDDEF
 %token CONS_FLO CONS_ENTERO CONS_CAD ID
 %token FLOAT INT STRING
@@ -37,7 +38,7 @@ void buscarTipoEnTS(char *id);
 %token AND OR NOT
 %token FACT COMB
 %token PYC PAR_A PAR_C COMA
-%token OP_DEF OP_ASIG OP_SUM OP_RES OP_DIV OP_MUL
+%token OP_DEF OP_SUM OP_RES OP_DIV OP_MUL
 %token OP_LT OP_GT OP_EQ OP_LE OP_GE OP_NE
 
 %locations
@@ -71,9 +72,9 @@ sentencia: asignacion {printf("Regla 13: <sentencia> ::= <asignacion>\n");}
 			| combinatoria {printf("Regla 20: <sentencia> ::= <combinatoria>\n");};
 
 asignacion: ID OP_ASIG expresion { printf("Regla 21 <asignacion> ::= ID OP_ASIG <expresion>\n");}
-			| ID OP_ASIG cadena {if (validarTipos(yylval.id, 1)) { printf("Regla 22: <asignacion> ::= ID OP_ASIG CONS_CAD\n"); } else {yyerror();} };
+			| ID OP_ASIG cadena { printf("Regla 22: <asignacion> ::= ID OP_ASIG CONS_CAD\n"); };
 
-cadena: CONS_CAD {if (yylval.overflow) { yyerror(); } else { printf("Regla 23: <cadena> ::= CONS_CAD\n");} };
+cadena: CONS_CAD { printf("Regla 23: <cadena> ::= CONS_CAD\n");};
 
 expresion: expresion OP_SUM termino {printf("Regla 24: <expresion> ::= <expresion> OP_SUM <termino>\n");}
 			| expresion OP_RES termino {printf("Regla 25: <expresion> ::= <expresion> OP_RES <termino>\n");}
@@ -199,7 +200,7 @@ void buscarTipoEnTS(char *id)
 	else 
 	{
 		while(fgets(strLinea, 200, ts) != NULL) 
-		{	
+		{
 			if (linea != 1 && linea != 2 && strLinea[0] != '_') 
 			{
 				sscanf(strLinea, "%s | %s", regTS.nombre, regTS.tipo);
