@@ -1,0 +1,83 @@
+***/ Asi son los comentarios en el 1 Cuat de LyC ***/ Comentario /*** /***
+
+ 
+
+***/ Declaraciones /***
+DEFVAR    
+    FLOAT : a1; b1
+    STRING : variable1; variable2
+    FLOAT : p1; p2; p3
+    INT : a;b;i
+ENDDEF
+***/ Constantes numericas /***
+b := 2
+a1 := 99999.99
+p2 := 99.
+p3 := .9999
+
+
+***/ Asignacion simple y Variables numericas /***
+
+a := b
+b1 := b * 5
+p1 := p2 + p3 
+a := a1
+b := a1 * 45 + 6 / (3 - b) * FACT(3)
+ 
+
+***/ Decision - Condicion simple /***
+IF ( b > 0) 
+    DISPLAY "b es mayor que cero"
+    IF ( NOT b < 0)    ***/ Decision - condicion simple NOT/***
+        DISPLAY "Verdadero"
+    ENDIF
+ENDIF
+
+ 
+
+***/ Decision - condicion multiple/***
+IF ( a > b AND 1 > 0) 
+    b := a + 1
+ENDIF
+
+ 
+
+***/ Entrada y Salida /***
+DISPLAY "Cantidad de alumnos"
+GET a
+DISPLAY a
+
+ 
+
+***/ Iteraciones /***
+i := 0
+WHILE ( i < 10 )
+    DISPLAY "While: 10 iteraciones"
+ENDWHILE
+
+ 
+
+***/ IF Unario /***
+DISPLAY b
+b := IF ( b > 0 , b + 1 , b + 2 ) 
+
+ 
+
+***/ Factorial /***
+DISPLAY "Factorial de 4"
+FACT ( 3 + 1 )
+
+ 
+
+***/ Combinatorio /***
+DISPLAY "Combinatorio de 6 y 2"
+COMB ( 6 , 2 )
+
+***/Estructuras anidadas /***
+WHILE (a > 5)
+	WHILE (b > 6 AND 2 > 1)
+		IF (NOT 5.5 > p3)
+			b := IF ( b > 0 , b + 1 , b + 2 ) 
+		ENDIF
+	ENDWHILE
+ENDWHILE
