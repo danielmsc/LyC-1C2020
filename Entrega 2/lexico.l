@@ -74,10 +74,70 @@ COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
 "<="			{return OP_LE;}
 ">="			{return OP_GE;}
 "!="			{return OP_NE;}
-{CONS_FLO}		{if (validarReal(atof(yytext))) { insertarEnTS(yytext, 0); yylval.flo=atof(yytext); return CONS_FLO; } else { printf("La constante esta fuera de rango %s\n", yytext); }  }
-{CONS_ENTERO}	{if (validarInteger(atoi(yytext))) { insertarEnTS(yytext, 0); yylval.ent=atoi(yytext); return CONS_ENTERO; } else { printf("La constante esta fuera de rango %s\n", yytext); }  }
-{CONS_CAD}		{if (validarString(yytext)) { insertarEnTS(yytext, 1); yylval.cad = strdup(yytext); return CONS_CAD;} else { printf("La constante string excede el maximo permitido\n"); } }
-{ID}			{if(strlen(yytext) <= 10 ){if(findec == 0){if(!guardadoEnTabla(yytext,1)){strcpy(regTS.nombre, yytext);insertarVarEnTS();yylval.id = strdup(yytext);return ID;}else{printf("Error: Declaracion de dos variables con el mismo nombre.\n");}}else{if(guardadoEnTabla(yytext,1)){yylval.id = strdup(yytext);return ID;}else{printf("Error: Utilizacion de variable sin declaracion\n");}}}else{printf("Las variables deben tener un largo maximo de 10 caracteres.\n");}}
+{CONS_FLO}		{	
+					if (validarReal(atof(yytext))) 
+					{ 
+						insertarEnTS(yytext, 0); 
+						yylval.flo=atof(yytext); 
+						return CONS_FLO; 
+					} else 
+					{ 
+						printf("La constante esta fuera de rango %s\n", yytext); 
+					}  
+				}
+{CONS_ENTERO}	{	
+					if (validarInteger(atoi(yytext))) 
+					{ 
+						insertarEnTS(yytext, 0); 
+						yylval.ent=atoi(yytext); 
+						return CONS_ENTERO; 
+					} else 
+					{ 
+						printf("La constante esta fuera de rango %s\n", yytext); 
+					} 
+				}
+{CONS_CAD}		{	
+					if (validarString(yytext)) 
+					{ 
+						insertarEnTS(yytext, 1); 
+						yylval.cad = strdup(yytext); 
+						return CONS_CAD;
+					} else 
+					{ 
+						printf("La constante string excede el maximo permitido\n"); 
+					} 
+				}
+{ID}			{
+					if(strlen(yytext) <= 10 )
+					{
+						if(findec == 0)
+						{
+							if(!guardadoEnTabla(yytext,1))
+							{
+								strcpy(regTS.nombre, yytext);
+								insertarVarEnTS();
+								yylval.id = strdup(yytext);
+								return ID;
+							}else
+							{
+								printf("Error: Declaracion de dos variables con el mismo nombre.\n");
+							}
+						}else
+						{
+							if(guardadoEnTabla(yytext,1))
+							{
+								yylval.id = strdup(yytext);
+								return ID;
+							}else
+							{
+								printf("Error: Utilizacion de variable sin declaracion\n");
+							}
+						}
+					}else
+					{
+						printf("Las variables deben tener un largo maximo de 10 caracteres.\n");
+					}
+				}
 {COMEN}			{ }
 {COMEN_ANI}		{ }
 " "				{ }
