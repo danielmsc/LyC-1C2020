@@ -8,6 +8,15 @@
 FILE *yyin;
 FILE *ts;
 extern int linea;
+int indexter;
+int Aind;
+int Eind;
+int Tind;
+int Find;
+int FACind;
+int COMBind;
+char auxchar[30];
+char auxchar2[30];
 
 typedef struct filaTS {
 	char nombre[50];
@@ -21,6 +30,7 @@ int yyerror();
 int crearTS();
 int validarTipos(char *id, int tipo);
 void buscarTipoEnTS(char *id);
+int crearTerceto(char* ptr1, char* ptr2, char* ptr3);
 %}
 
 %union
@@ -36,7 +46,7 @@ void buscarTipoEnTS(char *id);
 %token <flo>CONS_FLO <ent>CONS_ENTERO <cad>CONS_CAD <id>ID
 %token FLOAT INT STRING
 %token DISPLAY GET
-%token WHILE ENDWHILE IF ENDIF
+%token WHILE ENDWHILE IF ELSE ENDIF
 %token AND OR NOT
 %token FACT COMB
 %token PYC PAR_A PAR_C COMA
@@ -46,7 +56,7 @@ void buscarTipoEnTS(char *id);
 %locations
 
 %%
-programa: bloquedef bloquemain {printf("Compilacion realizada con exito.\n");};
+programa: bloquedef { indexter = 0;} bloquemain {printf("Compilacion realizada con exito.\n");};
 
 bloquedef: DEFVAR bloquevar ENDDEF 
 			| DEFVAR ENDDEF ;
@@ -73,20 +83,68 @@ sentencia: asignacion
 			| factorial 
 			| combinatoria ;
 
-asignacion: ID OP_ASIG expresion {if(validarTipos($1,2) || validarTipos($1,3)){ ;}else{printf("Error: Asignacion de un FLOAT o INT a un string\n");yyerror();};}
-			| ID OP_ASIG CONS_CAD {if(validarTipos($1,1)){ }else{printf("Error: Asignacion de un STRING a un FLOAT o INT\n");yyerror();};};
+asignacion: ID OP_ASIG expresion 	{	
+										if(validarTipos($1,2) || validarTipos($1,3))
+										{ 
+											sprintf(auxchar,"%d", Eind);
+											Aind = crearTerceto(":=",$1, auxchar);
+										}else
+										{
+											printf("Error: Asignacion de un FLOAT o INT a un string\n");
+											yyerror();
+										};
+									}
+			| ID OP_ASIG CONS_CAD 	{
+										if(validarTipos($1,1))
+										{ 
+											Aind = crearTerceto(":=",$1, $3);
+										}else
+										{
+											printf("Error: Asignacion de un STRING a un FLOAT o INT\n");
+											yyerror();
+										};
+									};
 
-expresion: expresion OP_SUM termino 
-			| expresion OP_RES termino 
-			| termino ;
+expresion: expresion OP_SUM termino {
+										sprintf(auxchar,"%d", Eind);
+										sprintf(auxchar2,"%d", Tind);
+										Eind = crearTerceto("+",auxchar, auxchar2);
+									}	
+			| expresion OP_RES termino {
+											sprintf(auxchar,"%d", Eind);
+											sprintf(auxchar2,"%d", Tind);
+											Eind = crearTerceto("-",auxchar, auxchar2);
+										}	
+			| termino {
+							Eind = Tind  ;
+						};
 			
-termino: termino OP_MUL factor 
-		 | termino OP_DIV factor 
-		 | factor ;
+termino: termino OP_MUL factor {
+									sprintf(auxchar,"%d", Tind);
+									sprintf(auxchar2,"%d", Find);
+									Tind = crearTerceto("*", auxchar,  auxchar2);
+								}
+		 | termino OP_DIV factor 	{
+										sprintf(auxchar,"%d", Tind);
+										sprintf(auxchar2,"%d", Find);
+										Tind = crearTerceto("/", auxchar,  auxchar2);
+									}
+		 | factor 	{
+						Tind = Find ;
+					}
+				;
 		 
-factor: ID 
-		| CONS_ENTERO 
-		| CONS_FLO 
+factor: ID {
+				Find = crearTerceto($1, " ", " ");
+			}	
+		| CONS_ENTERO 	{
+							sprintf(auxchar,"%d", $1);
+							Find = crearTerceto(auxchar, " ", " ");
+						}
+		| CONS_FLO 	{
+						sprintf(auxchar,"%f", $1);
+						Find = crearTerceto(auxchar, " ", " ");
+					}
 		| PAR_A expresion PAR_C 
 		| factorial 
 		| combinatoria;
@@ -97,7 +155,8 @@ factorial: FACT PAR_A expresion PAR_C ;
 
 ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE ;
 
-seleccion: IF PAR_A condicion PAR_C bloquemain ENDIF ;
+seleccion: IF PAR_A condicion PAR_C bloquemain ELSE bloquemain ENDIF
+			|IF PAR_A condicion PAR_C bloquemain ENDIF;
 
 condicion: argumento 
 			| NOT argumento 
@@ -215,6 +274,25 @@ void buscarTipoEnTS(char *id)
 	
 	fclose(ts);
 }
+
+int crearTerceto(char* ptr1, char* ptr2, char* ptr3)
+{
+	FILE *at;
+	
+	if ((at = fopen("tercetos.txt", "a")) == NULL)
+	{
+		printf("No se pudo crear el archivo tercetos.txt\n");
+	}
+	else 
+	{
+		 indexter++;
+		 fprintf(at, "[%d] (%s,%s,%s)\n",indexter, ptr1, ptr2, ptr3);
+	}
+	
+	fclose(at);
+	return indexter;
+}
+
 
 
 

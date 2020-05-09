@@ -1,0 +1,5 @@
+DEFVAR    
+    INT: a ; z
+ENDDEF
+
+a := z * ( 8 + 2 )

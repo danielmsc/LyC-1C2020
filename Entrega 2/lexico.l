@@ -52,6 +52,7 @@ COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
 "WHILE"			{return WHILE;}
 "ENDWHILE"		{return ENDWHILE;}
 "IF"			{return IF;}
+"ELSE"			{return ELSE;}
 "ENDIF"			{return ENDIF;}
 "AND"			{return AND;}
 "OR"			{return OR;}
@@ -78,7 +79,7 @@ COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
 					if (validarReal(atof(yytext))) 
 					{ 
 						insertarEnTS(yytext, 0); 
-						yylval.flo=atof(yytext); 
+						yylval.flo=atof(yytext);
 						return CONS_FLO; 
 					} else 
 					{ 
@@ -89,7 +90,7 @@ COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
 					if (validarInteger(atoi(yytext))) 
 					{ 
 						insertarEnTS(yytext, 0); 
-						yylval.ent=atoi(yytext); 
+						yylval.ent=atoi(yytext);						
 						return CONS_ENTERO; 
 					} else 
 					{ 
