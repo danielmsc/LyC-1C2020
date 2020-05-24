@@ -1,0 +1,7 @@
+DEFVAR    
+    STRING : variable1asd
+    FLOAT : p1
+    INT : a
+ENDDEF
+
+variable1 := "hola"

@@ -7,8 +7,10 @@
 
 FILE *yyin;
 FILE *ts;
+int AuxIndiceProximo; // 1 Si es Factor, 2 si es termino, 3 si es expresion.
 extern int linea;
 int indexter;
+int proximoTerceto;
 int Aind;
 int Eind;
 int Tind;
@@ -25,6 +27,45 @@ typedef struct filaTS {
 
 filaTS regTS;
 
+typedef int t_dato;
+
+typedef struct s_nodo{
+    t_dato dato;
+    struct s_nodo *sig;
+} t_nodo;
+
+typedef t_nodo* t_pila;
+
+typedef struct t_proximoTerceto {
+	int proximoTerceto;
+	int	auxproximoTerceto;
+	int parentesis;
+} t_proximoTerceto;
+
+typedef t_proximoTerceto t_dato_terceto;
+
+typedef struct s_nodo_terceto{
+    t_dato_terceto dato;
+    struct s_nodo_terceto *sig;
+} t_nodo_terceto;
+
+typedef t_nodo_terceto* t_pilaTerceto;
+
+t_pilaTerceto pilaAuxTerceto;
+
+t_pila pilaIndices;
+
+t_dato_terceto auxTerceto;
+
+int parentesis;
+
+void crearPila(t_pila *p);
+void crearPilaTerceto(t_pilaTerceto *p);
+int pilaVacia(const t_pila *p);
+int apilar(t_pila *p, const t_dato *d);
+int desapilar(t_pila *p, t_dato *d);
+int apilarTerceto(t_pilaTerceto *p, const t_dato_terceto *d);
+int desapilarTerceto(t_pilaTerceto *p, t_dato_terceto *d);
 int yylex();
 int yyerror();
 int crearTS();
@@ -56,7 +97,7 @@ int crearTerceto(char* ptr1, char* ptr2, char* ptr3);
 %locations
 
 %%
-programa: bloquedef { indexter = 0;} bloquemain {printf("Compilacion realizada con exito.\n");};
+programa: bloquedef { indexter = 0; proximoTerceto = 0;  Eind = 1; Tind = 1; Find = 1; parentesis = 0; crearPilaTerceto( &pilaAuxTerceto);  crearPila( &pilaIndices);  } bloquemain {printf("Compilacion realizada con exito.\n");};
 
 bloquedef: DEFVAR bloquevar ENDDEF 
 			| DEFVAR ENDDEF ;
@@ -79,14 +120,12 @@ sentencia: asignacion
 			| seleccion 
 			| unario 
 			| display 
-			| get 
-			| factorial 
-			| combinatoria ;
+			| get;
 
 asignacion: ID OP_ASIG expresion 	{	
 										if(validarTipos($1,2) || validarTipos($1,3))
 										{ 
-											sprintf(auxchar,"%d", Eind);
+											sprintf(auxchar,"[%d]", Eind);
 											Aind = crearTerceto(":=",$1, auxchar);
 										}else
 										{
@@ -106,31 +145,107 @@ asignacion: ID OP_ASIG expresion 	{
 									};
 
 expresion: expresion OP_SUM termino {
-										sprintf(auxchar,"%d", Eind);
-										sprintf(auxchar2,"%d", Tind);
+										if( proximoTerceto != 0)
+										{
+											switch(AuxIndiceProximo)
+											{
+												case 2:
+													sprintf(auxchar,"[%d]", Eind);
+													sprintf(auxchar2,"[%d]", proximoTerceto);
+													break;
+												case 3:
+													sprintf(auxchar,"[%d]", proximoTerceto);
+													sprintf(auxchar2,"[%d]", Tind);
+													break;
+											}
+										}else
+										{
+											sprintf(auxchar,"[%d]", Eind);
+											sprintf(auxchar2,"[%d]", Tind);
+										}
+										proximoTerceto = 0;
 										Eind = crearTerceto("+",auxchar, auxchar2);
 									}	
 			| expresion OP_RES termino {
-											sprintf(auxchar,"%d", Eind);
-											sprintf(auxchar2,"%d", Tind);
+											if( proximoTerceto != 0)
+											{
+												switch(AuxIndiceProximo)
+												{
+													case 2:
+														sprintf(auxchar,"[%d]", Eind);
+														sprintf(auxchar2,"[%d]", proximoTerceto);
+														break;
+													case 3:
+														sprintf(auxchar,"[%d]", proximoTerceto);
+														sprintf(auxchar2,"[%d]", Tind);
+														break;
+												}
+											}else
+											{
+												sprintf(auxchar,"[%d]", Eind);
+												sprintf(auxchar2,"[%d]", Tind);
+											}
+											proximoTerceto = 0;
 											Eind = crearTerceto("-",auxchar, auxchar2);
 										}	
 			| termino {
-							Eind = Tind  ;
+							Eind = Tind;
+							if( proximoTerceto != 0)
+							{
+								AuxIndiceProximo = 3;
+							}
 						};
 			
 termino: termino OP_MUL factor {
-									sprintf(auxchar,"%d", Tind);
-									sprintf(auxchar2,"%d", Find);
+									if( proximoTerceto != 0)
+									{
+										switch(AuxIndiceProximo)
+										{
+											case 1:
+												sprintf(auxchar,"[%d]", Tind);
+												sprintf(auxchar2,"[%d]", proximoTerceto);
+												break;
+											case 2:
+												sprintf(auxchar,"[%d]", proximoTerceto);
+												sprintf(auxchar2,"[%d]", Find);
+												break;
+										}
+									}else
+									{
+										sprintf(auxchar,"[%d]", Tind);
+										sprintf(auxchar2,"[%d]", Find);
+									}
+									proximoTerceto = 0;
 									Tind = crearTerceto("*", auxchar,  auxchar2);
 								}
 		 | termino OP_DIV factor 	{
-										sprintf(auxchar,"%d", Tind);
-										sprintf(auxchar2,"%d", Find);
+										if( proximoTerceto != 0)
+										{
+											switch(AuxIndiceProximo)
+											{
+												case 1:
+													sprintf(auxchar,"[%d]", Tind);
+													sprintf(auxchar2,"[%d]", proximoTerceto);
+													break;
+												case 2:
+													sprintf(auxchar,"[%d]", proximoTerceto);
+													sprintf(auxchar2,"[%d]", Find);
+													break;
+											}
+										}else
+										{
+											sprintf(auxchar,"[%d]", Tind);
+											sprintf(auxchar2,"[%d]", Find);
+										}
+										proximoTerceto = 0;
 										Tind = crearTerceto("/", auxchar,  auxchar2);
 									}
 		 | factor 	{
 						Tind = Find ;
+						if( proximoTerceto != 0 && AuxIndiceProximo < 2 )
+						{
+							AuxIndiceProximo = 2;
+						}
 					}
 				;
 		 
@@ -145,7 +260,44 @@ factor: ID {
 						sprintf(auxchar,"%f", $1);
 						Find = crearTerceto(auxchar, " ", " ");
 					}
-		| PAR_A expresion PAR_C 
+		| PAR_A 		{ 	
+							if(parentesis > 0 && proximoTerceto == 0)
+							{
+								parentesis++;
+							}
+							if( proximoTerceto != 0 )
+							{
+								auxTerceto.proximoTerceto    = proximoTerceto;
+								auxTerceto.auxproximoTerceto = AuxIndiceProximo;
+								auxTerceto.parentesis = parentesis;
+								apilarTerceto( &pilaAuxTerceto, &auxTerceto);
+								parentesis = 1;
+								proximoTerceto = 0;
+							}
+							
+							apilar( &pilaIndices, &Eind);
+							apilar( &pilaIndices, &Tind);
+							apilar( &pilaIndices, &Find);
+						} 
+		expresion PAR_C {
+							desapilar( &pilaIndices, &Find);
+							desapilar( &pilaIndices, &Tind);
+							desapilar( &pilaIndices, &Eind);
+							parentesis--;
+							if(parentesis == 0)
+							{
+								desapilarTerceto(&pilaAuxTerceto, &auxTerceto);
+								proximoTerceto = auxTerceto.proximoTerceto;
+								AuxIndiceProximo = auxTerceto.auxproximoTerceto;
+								parentesis	= auxTerceto.parentesis;
+								Find = indexter;
+								Tind = indexter;
+							}else
+							{
+								proximoTerceto = indexter;
+								AuxIndiceProximo = 1;
+							}
+						}
 		| factorial 
 		| combinatoria;
 		
@@ -158,12 +310,12 @@ ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE ;
 seleccion: IF PAR_A condicion PAR_C bloquemain ELSE bloquemain ENDIF
 			|IF PAR_A condicion PAR_C bloquemain ENDIF;
 
-condicion: argumento 
+condicion: argumento  
 			| NOT argumento 
 			| argumento AND argumento 
 			| argumento OR  argumento ;
 
-argumento: expresion operador expresion ;
+argumento: expresion operador expresion  ;
 			
 operador: OP_LT 
 			| OP_GT 
@@ -172,12 +324,12 @@ operador: OP_LT
 			| OP_GE 
 			| OP_NE ;
 		
-unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C ;
+unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C {  };
 
-display: DISPLAY ID 	
-		 | DISPLAY CONS_CAD ;
+display: DISPLAY ID { crearTerceto( "DISPLAY", $2, ""); }
+		 | DISPLAY CONS_CAD { crearTerceto( "DISPLAY", $2, ""); };
 
-get: GET ID ;
+get: GET ID { crearTerceto( "=", $2, "INPUT"); } ;
 %%
 
 int main(int argc, char *argv[])
@@ -293,15 +445,75 @@ int crearTerceto(char* ptr1, char* ptr2, char* ptr3)
 	return indexter;
 }
 
+void crearPilaTerceto(t_pilaTerceto *p)
+{
+    *p = NULL;
+}
+
+void crearPila(t_pila *p)
+{
+    *p = NULL;
+}
+
+int pilaVacia(const t_pila *p)
+{
+    return *p == NULL;
+}
 
 
+int apilar(t_pila *p, const t_dato *d)
+{
+    t_nodo *nue = (t_nodo *)malloc(sizeof(t_nodo));
+    if(!nue)
+        return 0;
 
+    nue -> dato = *d;
+    nue -> sig = *p;
+    *p = nue;
 
+    return 1;
+}
 
+int desapilar(t_pila *p, t_dato *d)
+{
+    t_nodo *aux = *p;
 
+    if(!*p)
+        return 0;
 
+    *d = (*p) -> dato;
+    *p = (*p) -> sig;
+    free(aux);
 
+    return 1;
+}
 
+int apilarTerceto(t_pilaTerceto *p, const t_dato_terceto *d)
+{
+    t_nodo_terceto *nue = (t_nodo_terceto *)malloc(sizeof(t_nodo_terceto));
+    if(!nue)
+        return 0;
+
+    nue -> dato = *d;
+    nue -> sig = *p;
+    *p = nue;
+
+    return 1;
+}
+
+int desapilarTerceto(t_pilaTerceto *p, t_dato_terceto *d)
+{
+    t_nodo_terceto *aux = *p;
+
+    if(!*p)
+        return 0;
+
+    *d = (*p) -> dato;
+    *p = (*p) -> sig;
+    free(aux);
+
+    return 1;
+}
 
 
 
