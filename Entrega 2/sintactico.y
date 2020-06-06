@@ -7,25 +7,12 @@
 
 FILE *yyin;
 FILE *ts;
-int AuxIndiceProximo; // 1 Si es Factor, 2 si es termino, 3 si es expresion.
-extern int linea;
-int indexter;
-int proximoTerceto;
-int Aind;
-int Eind;
-int Tind;
-int Find;
-int FACind;
-int COMBind;
-char auxchar[30];
-char auxchar2[30];
 
+// ESTRUCTURAS
 typedef struct filaTS {
 	char nombre[50];
 	char tipo[50];
 } filaTS;
-
-filaTS regTS;
 
 typedef int t_dato;
 
@@ -51,27 +38,73 @@ typedef struct s_nodo_terceto{
 
 typedef t_nodo_terceto* t_pilaTerceto;
 
-t_pilaTerceto pilaAuxTerceto;
+typedef struct saltoCondicional{
+	int tercetoACambiar;
+	int tipoCondicion; // 1 Si es Simple, 2 si es AND, 3 Si es OR
+	int segundoTerceto;
+	int indexterjump;
+}saltoCondicional;
 
-t_pila pilaIndices;
+typedef saltoCondicional t_dato_salto;
 
-t_dato_terceto auxTerceto;
+typedef struct s_nodo_salto{
+    t_dato_salto dato;
+    struct s_nodo_salto *sig;
+} t_nodo_salto;
 
+typedef t_nodo_salto* t_pilaSalto;
+
+//VARIABLES AUXILIARES
+int AuxIndiceProximo; // 1 Si es Factor, 2 si es termino, 3 si es expresion.
+extern int linea;
+int indexter;
+int indexterunario;
+int indexterwhile;
+int proximoTerceto;
+int Aind;
+int Eind;
+int Tind;
+int Find;
+int FACind;
+int COMBind;
+char auxchar[30];
+char auxchar2[30];
+char auxchar3[30];
 int parentesis;
+char opCond[6];
+int notbandera;
+filaTS regTS;
+t_pilaTerceto pilaAuxTerceto;
+t_pila pilaIndices;
+t_pilaSalto pilaSalto;
+t_dato_terceto auxTerceto;
+t_dato_salto auxSalto;
 
+
+//FUNCIONES
 void crearPila(t_pila *p);
 void crearPilaTerceto(t_pilaTerceto *p);
+void crearPilaSalto(t_pilaSalto *p);
+
 int pilaVacia(const t_pila *p);
+int pilaSaltoVacia(const t_pilaSalto *p);
+
 int apilar(t_pila *p, const t_dato *d);
 int desapilar(t_pila *p, t_dato *d);
+
 int apilarTerceto(t_pilaTerceto *p, const t_dato_terceto *d);
 int desapilarTerceto(t_pilaTerceto *p, t_dato_terceto *d);
+
+int apilarSalto(t_pilaSalto *p, const t_dato_salto *d);
+int desapilarSalto(t_pilaSalto *p, t_dato_salto *d);
+
 int yylex();
 int yyerror();
 int crearTS();
 int validarTipos(char *id, int tipo);
 void buscarTipoEnTS(char *id);
 int crearTerceto(char* ptr1, char* ptr2, char* ptr3);
+int actualizarTerceto(int numTerceto);
 %}
 
 %union
@@ -97,7 +130,25 @@ int crearTerceto(char* ptr1, char* ptr2, char* ptr3);
 %locations
 
 %%
-programa: bloquedef { indexter = 0; proximoTerceto = 0;  Eind = 1; Tind = 1; Find = 1; parentesis = 0; crearPilaTerceto( &pilaAuxTerceto);  crearPila( &pilaIndices);  } bloquemain {printf("Compilacion realizada con exito.\n");};
+programa: bloquedef { 	
+						indexter = 0;
+						proximoTerceto = 0;  
+						Eind = 1; 
+						Tind = 1; 
+						Find = 1; 
+						parentesis = 0;
+						notbandera = 0;
+						auxSalto.tercetoACambiar = -1;
+						auxSalto.tipoCondicion = 0;
+						auxSalto.segundoTerceto = -1;
+						auxSalto.indexterjump = -1;
+						crearPilaSalto(&pilaSalto);
+						crearPilaTerceto( &pilaAuxTerceto);  
+						crearPila( &pilaIndices);  
+					} bloquemain {
+						crearTerceto("MOV", "4c00h", "ax");
+						printf("Compilacion realizada con exito.\n");
+					};
 
 bloquedef: DEFVAR bloquevar ENDDEF 
 			| DEFVAR ENDDEF ;
@@ -305,26 +356,302 @@ combinatoria: COMB PAR_A expresion COMA expresion PAR_C ;
 
 factorial: FACT PAR_A expresion PAR_C ;
 
-ciclo: WHILE PAR_A condicion PAR_C bloquemain ENDWHILE ;
+ciclo: WHILE PAR_A { 
+						indexterwhile = indexter + 1;
+						if(auxSalto.tercetoACambiar != -1){
+							apilarSalto(&pilaSalto, &auxSalto);
+						}
+					} condiciones PAR_C { 
+										if( auxSalto.tipoCondicion == 3)
+										{
+											actualizarTerceto(auxSalto.tercetoACambiar);
+											actualizarTerceto( auxSalto.segundoTerceto );
+										}
+									 }bloquemain ENDWHILE { 															
+															sprintf(auxchar3,"[%d]", indexterwhile);
+															crearTerceto("JMP", auxchar3, " " );
+															
+															if( auxSalto.tipoCondicion == 1)
+															{
+																actualizarTerceto(auxSalto.tercetoACambiar);
+															}else if( auxSalto.tipoCondicion == 2){
+																actualizarTerceto(auxSalto.tercetoACambiar);
+																actualizarTerceto(auxSalto.segundoTerceto );
+															}else if( auxSalto.tipoCondicion == 3){
+																	actualizarTerceto(auxSalto.segundoTerceto + 1 );
+															}
+															
+															if(pilaSaltoVacia(&pilaSalto) == 0){
+																desapilarSalto(&pilaSalto, &auxSalto);
+															}else{
+																auxSalto.tercetoACambiar = -1; 
+																auxSalto.tipoCondicion = 0; 
+															}
+														}
+		| WHILE PAR_A NOT { 
+							indexterwhile = indexter + 1;
+							if(auxSalto.tercetoACambiar != -1){
+								apilarSalto(&pilaSalto, &auxSalto);
+							}
+							notbandera = 1; 
+						} condicion PAR_C bloquemain ENDWHILE{ 
+																sprintf(auxchar3,"[%d]", indexterwhile);
+																crearTerceto("JMP", auxchar3, " " );
+																
+																if( auxSalto.tipoCondicion == 1)
+																{
+																	actualizarTerceto(auxSalto.tercetoACambiar);
+																}
+	
+																if(pilaSaltoVacia(&pilaSalto) == 0){
+																	desapilarSalto(&pilaSalto, &auxSalto);
+																}else{
+																	auxSalto.tercetoACambiar = -1; 
+																	auxSalto.tipoCondicion = 0; 
+																}
+															};
 
-seleccion: IF PAR_A condicion PAR_C bloquemain ELSE bloquemain ENDIF
-			|IF PAR_A condicion PAR_C bloquemain ENDIF;
+seleccion: IF PAR_A{ 
+						if(auxSalto.tercetoACambiar != -1){
+							apilarSalto(&pilaSalto, &auxSalto);
+						}
+					}  condiciones PAR_C{ 
+										if( auxSalto.tipoCondicion == 3)
+										{
+											actualizarTerceto(auxSalto.tercetoACambiar);
+											actualizarTerceto( auxSalto.segundoTerceto);
+										}
+									 } bloquemain bloqueelse
+			| IF PAR_A NOT { 
+						if(auxSalto.tercetoACambiar != -1){
+							apilarSalto(&pilaSalto, &auxSalto);
+						}
+						notbandera = 1;
+					} 
+					condicion PAR_C{ 
+										notbandera = 0;
+									 } bloquemain bloqueelse;
+										 
+bloqueelse: ELSE {
+				indexter = indexter + 1;
+				if( auxSalto.tipoCondicion == 1)
+				{
+					actualizarTerceto(auxSalto.tercetoACambiar);
+				}else if( auxSalto.tipoCondicion == 2){
+					actualizarTerceto(auxSalto.tercetoACambiar);
+					actualizarTerceto(auxSalto.segundoTerceto );
+				}else if( auxSalto.tipoCondicion == 3){
+						actualizarTerceto(auxSalto.segundoTerceto + 1 );
+				}
+				indexter = indexter - 1;
+				crearTerceto("JMP", " ", " " );
+				auxSalto.indexterjump = indexter;
+			 } bloquemain ENDIF { 
+								actualizarTerceto(auxSalto.indexterjump );
+								if(pilaSaltoVacia(&pilaSalto) == 0){
+									desapilarSalto(&pilaSalto, &auxSalto);
+									
+								}else{
+									auxSalto.tercetoACambiar = -1; 
+									auxSalto.tipoCondicion = 0; 
+									auxSalto.segundoTerceto = -1;
+									auxSalto.indexterjump = -1;
+								}
+							}
+			| ENDIF { 
+						if( auxSalto.tipoCondicion == 1)
+						{
+							actualizarTerceto(auxSalto.tercetoACambiar);
+						}else if( auxSalto.tipoCondicion == 2){
+							actualizarTerceto(auxSalto.tercetoACambiar);
+							actualizarTerceto(auxSalto.tercetoACambiar + 4 );
+						}else if( auxSalto.tipoCondicion == 3){
+								actualizarTerceto(auxSalto.tercetoACambiar + 5 );
+						}
+						
+						if(pilaSaltoVacia(&pilaSalto) == 0){
+							desapilarSalto(&pilaSalto, &auxSalto);
+						}else{
+							auxSalto.tercetoACambiar = -1; 
+							auxSalto.tipoCondicion = 0; 
+						}
+					} ;
 
-condicion: argumento  
-			| NOT argumento 
-			| argumento AND argumento 
-			| argumento OR  argumento ;
+condicion:  argumento  {
+							crearTerceto(opCond, " " , " " );
+							auxSalto.tercetoACambiar = indexter;
+							auxSalto.tipoCondicion = 1;
+						};
+						
+condiciones:  argumento  {
+							crearTerceto(opCond, " " , " " );
+							auxSalto.tercetoACambiar = indexter;
+							auxSalto.tipoCondicion = 1;
+						}
+			| argumento  AND { 
+								crearTerceto(opCond, " ", " "  );  
+								auxSalto.tercetoACambiar = indexter;
+								auxSalto.tipoCondicion = 2;	
+							}argumento { crearTerceto(opCond, " ", " "  );
+											auxSalto.segundoTerceto = indexter;
+										}
+			|  argumento OR  { 
+								if(strcmp(opCond, "BGE") == 0)
+								{
+									sprintf(opCond,"%s", "BLT");
+								}
+								else if (strcmp (opCond , "BLT") == 0)
+								{
+									sprintf(opCond,"%s", "BGE");
+								}
+								else if(strcmp(opCond, "BLE") == 0)
+								{
+									sprintf(opCond,"%s", "BGT");
+								}
+								else if (strcmp (opCond , "BGT") == 0)
+								{
+									sprintf(opCond,"%s", "BLE");
+								}
+								else if(strcmp(opCond, "BNE") == 0)
+								{
+									sprintf(opCond,"%s", "BEQ");
+								}
+								else if (strcmp (opCond , "BEQ") == 0)
+								{
+									sprintf(opCond,"%s", "BNE");
+								}
+								notbandera = 1;
+								crearTerceto(opCond, " ", " " );  
+								auxSalto.tercetoACambiar = indexter ;
+								auxSalto.tipoCondicion = 3;
+							}  argumento { 
+											notbandera = 0; 
+											crearTerceto(opCond, " "," "  );
+											auxSalto.segundoTerceto = indexter;
+											crearTerceto("JMP", " ", " " );
+										};
 
-argumento: expresion operador expresion  ;
+argumento: expresion { 
+							sprintf(auxchar3,"[%d]", indexter);
+						} operador expresion  { 
+											sprintf(auxchar,"[%d]", indexter);
+											crearTerceto("CMP", auxchar3 , auxchar);
+										};
+				
+operador: OP_LT {	
+					if(notbandera == 0){
+						sprintf(opCond,"%s", "BGE");
+					}else{
+						sprintf(opCond,"%s", "BLT");
+					}
+				}
+            | OP_GT {	
+						if(notbandera == 0){
+							sprintf(opCond,"%s", "BLE");
+						}else{
+							sprintf(opCond,"%s", "BGT");
+						}
+					}
+            | OP_EQ {	
+						if(notbandera == 0){
+							sprintf(opCond,"%s", "BNE");
+						}else{
+							sprintf(opCond,"%s", "BEQ");
+						}
+					}
+            | OP_LE {	
+						if(notbandera == 0){
+							sprintf(opCond,"%s", "BGT");
+						}else{
+							sprintf(opCond,"%s", "BLE");
+						}
+					}
+            | OP_GE {	
+						if(notbandera == 0){
+							sprintf(opCond,"%s", "BLT");
+						}else{
+							sprintf(opCond,"%s", "BGE");
+						}
+					}
+            | OP_NE {	
+						if(notbandera == 0){
+							sprintf(opCond,"%s", "BEQ");
+						}else{
+							sprintf(opCond,"%s", "BNE");
+						}
+					};
 			
-operador: OP_LT 
-			| OP_GT 
-			| OP_EQ 
-			| OP_LE 
-			| OP_GE 
-			| OP_NE ;
-		
-unario: ID OP_ASIG IF PAR_A condicion COMA expresion COMA expresion PAR_C {  };
+unario: ID OP_ASIG IF PAR_A { 
+								if(auxSalto.tercetoACambiar != -1){
+									apilarSalto(&pilaSalto, &auxSalto);
+								}
+							}condiciones COMA{ 
+											//indexter = indexter + 1; 
+											if( auxSalto.tipoCondicion == 3)
+											{
+												actualizarTerceto(auxSalto.tercetoACambiar);
+												actualizarTerceto( auxSalto.segundoTerceto);
+											}
+											//indexter = indexter - 1;
+										 } expresion  COMA{
+																sprintf(auxchar,"[%d]", indexter);
+																crearTerceto(":=", $1 , auxchar );
+																indexter = indexter + 1; 
+																if( auxSalto.tipoCondicion == 1)
+																{
+																	actualizarTerceto(auxSalto.tercetoACambiar);
+																}else if( auxSalto.tipoCondicion == 2){
+																	actualizarTerceto(auxSalto.tercetoACambiar);
+																	actualizarTerceto(auxSalto.segundoTerceto );
+																}else if( auxSalto.tipoCondicion == 3){
+																		actualizarTerceto(auxSalto.segundoTerceto + 1  );
+																}
+																indexter = indexter - 1;
+																crearTerceto("JMP"," "," ");
+																indexterunario = indexter;
+															 }  expresion PAR_C { 
+																					sprintf(auxchar,"[%d]", indexter);
+																					crearTerceto(":=", $1 , auxchar );
+																					if(pilaSaltoVacia(&pilaSalto) == 0){
+																						desapilarSalto(&pilaSalto, &auxSalto);
+																					}else{
+																						auxSalto.tercetoACambiar = -1;
+																						auxSalto.segundoTerceto = -1;
+																						auxSalto.tipoCondicion = 0; 
+																					}
+																					//indexter = indexter + 1; 
+																					actualizarTerceto(indexterunario);
+																					//indexter = indexter - 1;
+																				}
+		|ID OP_ASIG IF PAR_A NOT{ 
+									if(auxSalto.tercetoACambiar != -1){
+										apilarSalto(&pilaSalto, &auxSalto);
+									}
+									notbandera = 1;
+								} condicion COMA expresion  COMA{
+																sprintf(auxchar,"[%d]", indexter);
+																crearTerceto(":=", $1 , auxchar );
+																indexter = indexter + 1; 
+																if( auxSalto.tipoCondicion == 1)
+																{
+																	actualizarTerceto(auxSalto.tercetoACambiar);
+																}
+																indexter = indexter - 1;
+																crearTerceto("JMP"," "," ");
+																indexterunario = indexter;
+															 }  expresion PAR_C { 
+																					sprintf(auxchar,"[%d]", indexter);
+																					crearTerceto(":=", $1 , auxchar );
+																					if(pilaSaltoVacia(&pilaSalto) == 0){
+																						desapilarSalto(&pilaSalto, &auxSalto);
+																					}else{
+																						auxSalto.tercetoACambiar = -1; 
+																						auxSalto.tipoCondicion = 0; 
+																					}
+																					//indexter = indexter + 1; 
+																					actualizarTerceto(indexterunario);
+																					//indexter = indexter - 1;
+																				};
 
 display: DISPLAY ID { crearTerceto( "DISPLAY", $2, ""); }
 		 | DISPLAY CONS_CAD { crearTerceto( "DISPLAY", $2, ""); };
@@ -445,6 +772,55 @@ int crearTerceto(char* ptr1, char* ptr2, char* ptr3)
 	return indexter;
 }
 
+int actualizarTerceto(int numTerceto)
+{
+	FILE *at;
+	FILE *to;
+	char str[200];
+	char pt1[50]; 
+	char pt2[50]; 
+	char pt3[50];
+	char *ptr1; 
+	char *ptr2; 
+	char *ptr3;
+	int tercetoLeido;
+	
+	if((to =  fopen("tercetosaux.txt", "w")) == NULL)
+	{
+		printf("No se pudo crear el archivo tercetos.txt\n");
+	}else
+	{
+		if ((at = fopen("tercetos.txt", "r")) == NULL)
+		{
+			printf("No se pudo crear el archivo tercetos.txt\n");
+		}
+		else 
+		{
+			fseek( at, 0, SEEK_SET );
+			while(fgets(str, 200, at) != NULL){ 
+				sscanf( str, "[%d] %s %s %s ", &tercetoLeido,  pt1,  pt2,  pt3 );
+				ptr1 = strtok(str,  "(");
+				ptr1 = strtok(NULL,  ",");
+				ptr2 = strtok(NULL,  ",");
+				ptr3 = strtok(NULL,  ")");
+				if(tercetoLeido == numTerceto){
+					indexter = indexter + 1;
+					fprintf(to, "[%d] (%s,[%d],%s)\n",numTerceto, ptr1, indexter, ptr3);
+					indexter = indexter - 1;
+				}else{
+					fprintf(to, "[%d] (%s,%s,%s)\n",tercetoLeido, ptr1, ptr2, ptr3);
+				}
+			}
+		}
+		fclose(at);
+	}
+	
+	fclose(to);
+	remove("tercetos.txt");
+	rename("tercetosaux.txt" , "tercetos.txt");
+	return indexter;
+}
+
 void crearPilaTerceto(t_pilaTerceto *p)
 {
     *p = NULL;
@@ -515,5 +891,39 @@ int desapilarTerceto(t_pilaTerceto *p, t_dato_terceto *d)
     return 1;
 }
 
+void crearPilaSalto(t_pilaSalto *p)
+{
+    *p = NULL;
+}
 
+int apilarSalto(t_pilaSalto *p, const t_dato_salto *d)
+{
+    t_nodo_salto *nue = (t_nodo_salto *)malloc(sizeof(t_nodo_salto));
+    if(!nue)
+        return 0;
 
+    nue -> dato = *d;
+    nue -> sig = *p;
+    *p = nue;
+
+    return 1;
+}
+
+int desapilarSalto(t_pilaSalto *p, t_dato_salto *d)
+{
+    t_nodo_salto *aux = *p;
+
+    if(!*p)
+        return 0;
+
+    *d = (*p) -> dato;
+    *p = (*p) -> sig;
+    free(aux);
+
+    return 1;
+}
+
+int pilaSaltoVacia(const t_pilaSalto *p)
+{
+    return *p == NULL;
+}

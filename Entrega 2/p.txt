@@ -1,5 +1,26 @@
-DEFVAR    
-    INT: a ; z
+DEFVAR
+	INT: a; b; c; d
 ENDDEF
 
-a := ( ( ( 2 + 3 ) * ( 3 - 2 ) ) / ( ( 4 * 5 ) - ( 8 / 2 ) ) * 3 ) - 2
+IF (a > b)
+	a := 2 * (d + 3) / 5
+	b := b + 1
+ELSE
+	IF (NOT a == b)
+		d := IF(45 <= c, 42, c + 1)
+	ELSE
+		WHILE (b < a AND d < 10)
+			IF (a != d OR c == b)
+				d :=  3 * 6 + c
+			ELSE
+				d := IF(NOT b == a, 1, 2 + c)
+			ENDIF
+		ENDWHILE
+	ENDIF
+ENDIF
+
+IF (a > 6)
+	a := 4
+ELSE
+	a := (b + c) / 2
+ENDIF
