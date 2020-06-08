@@ -4,7 +4,7 @@ bison -dyv sintactico.y
 pause
 gcc lex.yy.c y.tab.c -o Segunda.exe
 pause
-.\Segunda.exe p.txt
+.\Segunda.exe prueba.txt
 pause
 del lex.yy.c
 del y.tab.c

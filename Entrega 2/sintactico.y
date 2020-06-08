@@ -643,8 +643,8 @@ unario: ID OP_ASIG IF PAR_A {
 																					//indexter = indexter - 1;
 																				};
 
-display: DISPLAY ID { crearTerceto( "DISPLAY", $2, ""); }
-		 | DISPLAY CONS_CAD { crearTerceto( "DISPLAY", $2, ""); };
+display: DISPLAY ID { crearTerceto( "DISPLAY", $2, " "); }
+		 | DISPLAY CONS_CAD { crearTerceto( "DISPLAY", $2, " "); };
 
 get: GET ID { crearTerceto( "=", $2, "INPUT"); } ;
 %%
@@ -748,9 +748,9 @@ int crearTerceto(char* ptr1, char* ptr2, char* ptr3)
 {
 	FILE *at;
 	
-	if ((at = fopen("tercetos.txt", "a")) == NULL)
+	if ((at = fopen("intermedia.txt", "a")) == NULL)
 	{
-		printf("No se pudo crear el archivo tercetos.txt\n");
+		printf("No se pudo crear el archivo intermedia.txt\n");
 	}
 	else 
 	{
@@ -775,14 +775,14 @@ int actualizarTerceto(int numTerceto)
 	char *ptr3;
 	int tercetoLeido;
 	
-	if((to =  fopen("tercetosaux.txt", "w")) == NULL)
+	if((to =  fopen("intermediaaux.txt", "w")) == NULL)
 	{
-		printf("No se pudo crear el archivo tercetos.txt\n");
+		printf("No se pudo crear el archivo intermediaaux.txt\n");
 	}else
 	{
-		if ((at = fopen("tercetos.txt", "r")) == NULL)
+		if ((at = fopen("intermedia.txt", "r")) == NULL)
 		{
-			printf("No se pudo crear el archivo tercetos.txt\n");
+			printf("No se pudo crear el archivo intermedia.txt\n");
 		}
 		else 
 		{
@@ -806,8 +806,8 @@ int actualizarTerceto(int numTerceto)
 	}
 	
 	fclose(to);
-	remove("tercetos.txt");
-	rename("tercetosaux.txt" , "tercetos.txt");
+	remove("intermedia.txt");
+	rename("intermediaaux.txt" , "intermedia.txt");
 	return indexter;
 }
 

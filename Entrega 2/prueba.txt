@@ -65,13 +65,13 @@ b := IF ( b > 0 , b + 1 , b + 2 )
 
 ***/ Factorial /***
 DISPLAY "Factorial de 4"
-FACT ( 3 + 1 )
+a := FACT ( 3 + 1 )
 
  
 
 ***/ Combinatorio /***
 DISPLAY "Combinatorio de 6 y 2"
-COMB ( 6 , 2 )
+a := COMB ( 6 , 2 )
 
 ***/Estructuras anidadas /***
 WHILE (a > 5)
