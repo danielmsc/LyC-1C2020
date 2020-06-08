@@ -67,6 +67,11 @@ int Tind;
 int Find;
 int FACind;
 int COMBind;
+int nCombinatoria;
+int xCombinatoria;
+int nFactorial;
+int xFactorial;
+int nxFactorial;
 char auxchar[30];
 char auxchar2[30];
 char auxchar3[30];
@@ -105,6 +110,9 @@ int validarTipos(char *id, int tipo);
 void buscarTipoEnTS(char *id);
 int crearTerceto(char* ptr1, char* ptr2, char* ptr3);
 int actualizarTerceto(int numTerceto);
+void funcionFactorial();
+void guardarParentesisAbre();
+void guardarParentesisCierra();
 %}
 
 %union
@@ -311,50 +319,32 @@ factor: ID {
 						sprintf(auxchar,"%f", $1);
 						Find = crearTerceto(auxchar, " ", " ");
 					}
-		| PAR_A 		{ 	
-							if(parentesis > 0 && proximoTerceto == 0)
-							{
-								parentesis++;
-							}
-							if( proximoTerceto != 0 )
-							{
-								auxTerceto.proximoTerceto    = proximoTerceto;
-								auxTerceto.auxproximoTerceto = AuxIndiceProximo;
-								auxTerceto.parentesis = parentesis;
-								apilarTerceto( &pilaAuxTerceto, &auxTerceto);
-								parentesis = 1;
-								proximoTerceto = 0;
-							}
-							
-							apilar( &pilaIndices, &Eind);
-							apilar( &pilaIndices, &Tind);
-							apilar( &pilaIndices, &Find);
-						} 
-		expresion PAR_C {
-							desapilar( &pilaIndices, &Find);
-							desapilar( &pilaIndices, &Tind);
-							desapilar( &pilaIndices, &Eind);
-							parentesis--;
-							if(parentesis == 0)
-							{
-								desapilarTerceto(&pilaAuxTerceto, &auxTerceto);
-								proximoTerceto = auxTerceto.proximoTerceto;
-								AuxIndiceProximo = auxTerceto.auxproximoTerceto;
-								parentesis	= auxTerceto.parentesis;
-								Find = indexter;
-								Tind = indexter;
-							}else
-							{
-								proximoTerceto = indexter;
-								AuxIndiceProximo = 1;
-							}
-						}
+		| PAR_A 		{ guardarParentesisAbre(); } 
+		expresion PAR_C { guardarParentesisCierra(); }
 		| factorial 
 		| combinatoria;
 		
-combinatoria: COMB PAR_A expresion COMA expresion PAR_C ;
+combinatoria: 	COMB PAR_A { guardarParentesisAbre(); }
+				expresion { nCombinatoria = indexter; funcionFactorial(); nFactorial = indexter; }
+				COMA
+				expresion { xCombinatoria = indexter; funcionFactorial(); xFactorial = indexter;
+							sprintf(auxchar,"[%d]", xCombinatoria);
+							sprintf(auxchar2,"[%d]", nCombinatoria);
+							crearTerceto("-", auxchar2, auxchar);
+							funcionFactorial(); nxFactorial = indexter;
+							sprintf(auxchar,"[%d]", xFactorial);
+							sprintf(auxchar2,"[%d]", nxFactorial);
+							crearTerceto("*", auxchar, auxchar2);
+							sprintf(auxchar,"[%d]", nFactorial);
+							sprintf(auxchar2,"[%d]", indexter);
+							crearTerceto("/", auxchar, auxchar2);
+							sprintf(auxchar,"[%d]", indexter);
+							crearTerceto(":=", "@res", auxchar); }
+				PAR_C { guardarParentesisCierra(); };
 
-factorial: FACT PAR_A expresion PAR_C ;
+factorial: 	FACT PAR_A { guardarParentesisAbre(); } 
+			expresion { funcionFactorial(); } 
+			PAR_C { guardarParentesisCierra(); };
 
 ciclo: WHILE PAR_A { 
 						indexterwhile = indexter + 1;
@@ -927,3 +917,88 @@ int pilaSaltoVacia(const t_pilaSalto *p)
 {
     return *p == NULL;
 }
+
+void funcionFactorial()
+{
+	sprintf(auxchar, "[%d]", indexter);
+	crearTerceto(":=", "@resFact", auxchar);
+	crearTerceto("CMP","@resFact", "1");
+	sprintf(auxchar2, "[%d]", indexter + 4);
+	crearTerceto("BGT", auxchar2, " ");
+	crearTerceto(":=", "@resFact", "1");
+	sprintf(auxchar2, "[%d]", indexter + 12);
+	crearTerceto("JMP", auxchar2, " ");
+	crearTerceto(":=", "@auxFact", auxchar);
+	crearTerceto("-", "@auxFact", "1");
+	crearTerceto("CMP","@auxFact", "1");
+	sprintf(auxchar, "[%d]", indexter + 3);
+	crearTerceto("BGT", auxchar, " ");
+	sprintf(auxchar, "[%d]", indexter + 7);
+	crearTerceto("JMP", auxchar, " ");
+	crearTerceto("*", "@resFact", "@auxFact");
+	sprintf(auxchar, "[%d]", indexter);
+	crearTerceto(":=", "@resFact", auxchar);
+	crearTerceto("-", "@auxFact", "1");
+	sprintf(auxchar, "[%d]", indexter);
+	crearTerceto(":=", "@auxFact", auxchar);
+	sprintf(auxchar, "[%d]", indexter - 6);
+	crearTerceto("JMP", auxchar, " ");
+	crearTerceto("@resFact", " ", " ");
+}
+
+void guardarParentesisAbre()
+{
+	if(parentesis > 0 && proximoTerceto == 0)
+	{
+		parentesis++;
+	}
+	if( proximoTerceto != 0 )
+	{
+		auxTerceto.proximoTerceto    = proximoTerceto;
+		auxTerceto.auxproximoTerceto = AuxIndiceProximo;
+		auxTerceto.parentesis = parentesis;
+		apilarTerceto( &pilaAuxTerceto, &auxTerceto);
+		parentesis = 1;
+		proximoTerceto = 0;
+	}
+	
+	apilar( &pilaIndices, &Eind);
+	apilar( &pilaIndices, &Tind);
+	apilar( &pilaIndices, &Find);
+}
+
+void guardarParentesisCierra()
+{
+	desapilar( &pilaIndices, &Find);
+	desapilar( &pilaIndices, &Tind);
+	desapilar( &pilaIndices, &Eind);
+	parentesis--;
+	if(parentesis == 0)
+	{
+		desapilarTerceto(&pilaAuxTerceto, &auxTerceto);
+		proximoTerceto = auxTerceto.proximoTerceto;
+		AuxIndiceProximo = auxTerceto.auxproximoTerceto;
+		parentesis	= auxTerceto.parentesis;
+		Find = indexter;
+		Tind = indexter;
+	}else
+	{
+		proximoTerceto = indexter;
+		AuxIndiceProximo = 1;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
