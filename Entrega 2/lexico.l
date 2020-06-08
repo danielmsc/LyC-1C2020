@@ -25,6 +25,7 @@ int validarString(char *palabra);
 int validarInteger(int num);
 int validarReal(double num);
 int guardadoEnTabla(char *nombre, int var);
+void errorCharInvalido();
 %}
 
 %option noyywrap  
@@ -40,6 +41,7 @@ CONS_CAD		\"({ALFANUMERICO})\"
 ID				{LETRA}({LETRA}|{DIGITO})*
 COMEN			"***/"({ALFANUMERICO})"/***"
 COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
+ANY				.
 
 %%
 "DEFVAR"		{return DEFVAR;}
@@ -144,6 +146,7 @@ COMEN_ANI		"***/"({ALFANUMERICO}){COMEN}?({ALFANUMERICO})"/***"
 " "				{ }
 "\t"			{ }
 \n				{ ++linea; }
+{ANY}			{ errorCharInvalido();}
 %%
 
 void insertarEnTS(char *yytext, int isString)
@@ -270,4 +273,11 @@ int validarReal(double num)
 	{
         return 0;
     }
+}
+
+void errorCharInvalido()
+{
+	printf("Caracter invalido ingresado\n");
+	system ("Pause");
+    exit (1);
 }
